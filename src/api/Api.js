@@ -43,7 +43,7 @@ function installEntryPoint(app, dataProvider, entryPoint, implementation)
 function installApi(app, dataProvider)
 {
     // Install all entry points.
-    installEntryPoint(app, dataProvider, '/getFoods',    'GetFoods')
+    installEntryPoint(app, dataProvider, '/getFoods',        'GetFoods')
     installEntryPoint(app, dataProvider, '/getFoodData/:id', 'GetFoodData')
 }
 

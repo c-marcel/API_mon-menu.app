@@ -546,11 +546,11 @@ class DebugDataProvider extends Parent.AbstractDataProvider
 
         for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
         {
-            let entry = gDebugDataProviderData.foods.at(i)
+            let entry  = gDebugDataProviderData.foods.at(i)
             let copied =
             {
-                id: entry.id,
-                title: entry.title,
+                id:      entry.id,
+                title:   entry.title,
                 details: entry.details
             }
 
