@@ -18,9 +18,9 @@ var Parent = require('./AbstractEntryPoint')
   * @apiParam {Number} id Food identifier as integer.
   *
   * @apiSuccess {Object} food Object containing food data.
-  * @apiSuccess {Number} foods.id Food identifier as number.
-  * @apiSuccess {String} foods.title Food title.
-  * @apiSuccess {Array} foods.months Array containing months when food is available (1: January, ...).
+  * @apiSuccess {Number} food.id Food identifier as number.
+  * @apiSuccess {String} food.title Food title.
+  * @apiSuccess {Array} food.months Array containing months when food is available (1: January, ...).
   * @apiSuccess {Number} food.supplyArea Enumeration for supply area (0: not defined, 1: local, 2: national, 4: continental, 8: global). 
   * @apiSuccess {Number} food.cost Cost in euro per kilogram.
   * @apiSuccess {Object} food.environmentalImpact Object containing environmental impact.
