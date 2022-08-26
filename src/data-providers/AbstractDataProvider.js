@@ -4,7 +4,8 @@
 
 // Abstract object representing a data provider.
 // Data providers must inherit from this class and implement
-// the methods: connect(), getFoods(), getFoodData(), disconnect().
+// the methods: connect(), getFoods(), getFoodData(), createFood(),
+// deleteFood(), updateFood(), disconnect().
 class AbstractDataProvider
 {
     // The 'description' parameter is a string for describing each data provider.
@@ -40,6 +41,30 @@ class AbstractDataProvider
     // 'id' parameter is an integer that uniquely identify a database entry.
     // This method returns a Promise that will return data as JSON.
     getFoodData(id)
+    {
+        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
+    }
+
+    // Create a new food entry.
+    // This method returns a Promise that will return data as JSON.
+    // Returned data contains the new entry id.
+    createFood()
+    {
+        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
+    }
+
+    // Delete a food entry.
+    // 'id' parameter is an integer that uniquely identify a database entry.
+    // This method returns a Promise that will return data as JSON.
+    deleteFood(id)
+    {
+        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
+    }
+
+    // Update a food entry.
+    // 'object' is the food entry (with all fields).
+    // This method returns a Promise that will return data as JSON.
+    updateFood(object)
     {
         return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
     }

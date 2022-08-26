@@ -528,11 +528,143 @@ var gDebugDataProviderData =
     ]
 }
 
+var gEmptyEntry =
+{
+    id:                     null,
+    title:                  null,
+    details:                null,
+    months:                 null,
+    supplyArea:             null,
+    cost:                   null,
+    environmentalImpact:
+    {
+        co2eq:
+        {
+            kgco2e_kg:      null,
+            source:         null
+        }
+    },
+    nutrition:
+    {
+        energy:
+        {
+            value:          null,
+            source:         null
+        },
+        proteins:
+        {
+            value:          null,
+            source:         null
+        },
+        carbohydrates:
+        {
+            value:          null,
+            source:         null
+        },
+        lipids:
+        {
+            value:          null,
+            source:         null
+        },
+        sugars:
+        {
+            value:          null,
+            source:         null
+        },
+        fibers:
+        {
+            value:          null,
+            source:         null
+        },
+        omega3_ala:
+        {
+            value:          null,
+            source:         null
+        },
+        omega3_epa:
+        {
+            value:          null,
+            source:         null
+        },
+        omega3_dha:
+        {
+            value:          null,
+            source:         null
+        },
+        omega6_la:
+        {
+            value:          null,
+            source:         null
+        },
+        omega6_ara:
+        {
+            value:          null,
+            source:         null
+        },
+        omega9:
+        {
+            value:          null,
+            source:         null
+        },
+        salt:
+        {
+            value:          null,
+            source:         null
+        },
+        calcium:
+        {
+            value:          null,
+            source:         null
+        },
+        copper:
+        {
+            value:          null,
+            source:         null
+        },
+        iron:
+        {
+            value:          null,
+            source:         null
+        },
+        iodine:
+        {
+            value:          null,
+            source:         null
+        },
+        magnesium:
+        {
+            value:          null,
+            source:         null
+        },
+        sodium:
+        {
+            value:          null,
+            source:         null
+        },
+        zinc:
+        {
+            value:          null,
+            source:         null
+        },
+        vitamin_c:
+        {
+            value:          null,
+            source:         null
+        },
+        vitamin_d:
+        {
+            value:          null,
+            source:         null
+        }
+    }
+}
+
 class DebugDataProvider extends Parent.AbstractDataProvider
 {
     constructor()
     {
         super("Local and volatile database storage. For debug only.");
+        this.nextAvailableId = 5
     }
 
     connect(options)
@@ -582,6 +714,70 @@ class DebugDataProvider extends Parent.AbstractDataProvider
 
             // id not found.
             resolve(JSON.parse('{}'))
+        })
+
+        return promise
+    }
+
+    createFood()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            // Copy empty entry.
+            let data = {...gEmptyEntry};
+
+            // Set next available id.
+            data.id = this.nextAvailableId
+            this.nextAvailableId++
+
+            // Add entry.
+            gDebugDataProviderData.foods.push(data)
+
+            resolve(JSON.parse('{"id": ' + data.id + '}'))
+        })
+
+        return promise
+    }
+
+    deleteFood(id)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
+            {
+                let entry = gDebugDataProviderData.foods.at(i)
+                if (entry.id == id)
+                {
+                    gDebugDataProviderData.foods.splice(i, 1)
+                    resolve(JSON.parse('{"code": "OK"}'))
+                    return
+                }
+            }
+
+            // id not found.
+            resolve(JSON.parse('{"code": "Not Found"}'))
+        })
+
+        return promise
+    }
+
+    updateFood(object)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
+            {
+                let entry = gDebugDataProviderData.foods.at(i)
+                if (entry.id == object.id)
+                {
+                    gDebugDataProviderData.foods[i] = object
+                    resolve(JSON.parse('{"code": "OK"}'))
+                    return
+                }
+            }
+
+            // id not found.
+            resolve(JSON.parse('{"code": "Not Found"}'))
         })
 
         return promise

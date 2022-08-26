@@ -33,12 +33,16 @@ if (!dataProvider.connect(g_config.providers.data.options))
 
 // Create application.
 const g_app = express()
+
 g_app.use(express.static('public'));
+g_app.use(express.json());
 
 // Install Api.
 installApi(g_app, dataProvider)
 
 // Start server.
+// Note: there is no need to use TLS because this server will communicate
+// locally with the Apache proxy.
 g_app.listen(g_config.server.port, () =>
 {
     console.log('Starting API on port: ' + g_config.server.port)

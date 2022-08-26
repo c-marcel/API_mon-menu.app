@@ -8,7 +8,7 @@
 
 function createErrorAnswer(error, details)
 {
-    return '{"error": "' + error + '", "details": "' + details + '"}'
+    return JSON.parse('{"error": "' + error + '", "details": "' + details + '"}')
 }
 
 // Authentication token.

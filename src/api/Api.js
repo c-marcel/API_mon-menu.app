@@ -8,6 +8,9 @@
 // Entry point implementations.
 var GetFoods    = require('./GetFoods')
 var GetFoodData = require('./GetFoodData')
+var CreateFood  = require('./CreateFood')
+var DeleteFood  = require('./DeleteFood')
+var UpdateFood  = require('./UpdateFood')
 
 // Install a specific entry point.
 // 'app' parameter is the express application.
@@ -15,7 +18,9 @@ var GetFoodData = require('./GetFoodData')
 // 'entryPoint' parameter is the name of the entry point (e.g. '/getFoods').
 // 'implementation' parameter is the name of the class (as string) that
 //                  implements the entry point (e.g. 'GetFoods').
-function installEntryPoint(app, dataProvider, entryPoint, implementation)
+// 'method' parameter defines HTTP verb. Default is 'get'. 
+//          Supported: 'get', 'put', 'post', 'delete'.
+function installEntryPoint(app, dataProvider, entryPoint, implementation, method = 'get')
 {
     // Instanciate implementation.
     var instance = null
@@ -37,14 +42,27 @@ function installEntryPoint(app, dataProvider, entryPoint, implementation)
     
     // Install entry point.
     console.log('Mounting entry point: ' + entryPoint)
-    app.get(entryPoint, instance.exec)
+    if (method === 'get')
+        app.get(entryPoint, instance.exec)
+
+    else if (method === 'put')
+        app.put(entryPoint, instance.exec)
+
+    else if (method === 'post')
+        app.post(entryPoint, instance.exec)
+
+    else if (method === 'delete')
+        app.delete(entryPoint, instance.exec)
 }
 
 function installApi(app, dataProvider)
 {
     // Install all entry points.
-    installEntryPoint(app, dataProvider, '/getFoods',        'GetFoods')
-    installEntryPoint(app, dataProvider, '/getFoodData/:id', 'GetFoodData')
+    installEntryPoint(app, dataProvider, '/getFoods',        'GetFoods',    'get'   )
+    installEntryPoint(app, dataProvider, '/getFoodData/:id', 'GetFoodData', 'get'   )
+    installEntryPoint(app, dataProvider, '/createFood',      'CreateFood',  'post'  )
+    installEntryPoint(app, dataProvider, '/deleteFood/:id',  'DeleteFood',  'delete')
+    installEntryPoint(app, dataProvider, '/updateFood',      'UpdateFood',  'put'   )
 }
 
 module.exports = { installApi }
