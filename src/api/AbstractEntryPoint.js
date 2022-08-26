@@ -39,6 +39,7 @@ class AbstractEntryPoint
         let authToken = String(req.headers["auth-token"])
         if (authToken !== ApiConstantToken)
         {
+            res.status(401)
             res.send(createErrorAnswer('Authentication error', 
                                        'No auth-token HTTP header defined or bad token.'))
             return
@@ -51,6 +52,7 @@ class AbstractEntryPoint
     {
         // No implementation for entry point: return an error.
         console.error("No implementation for entry point: " + this.entryPoint)
+        res.status(501)
         res.send(createErrorAnswer('Entry point without implementation', 
                                    'Internal Api error: this entry point has no implementation.'))
     }

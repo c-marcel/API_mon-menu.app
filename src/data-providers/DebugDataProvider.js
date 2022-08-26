@@ -692,7 +692,7 @@ class DebugDataProvider extends Parent.AbstractDataProvider
                 data.foods.push(copied)
             }
 
-            resolve(data)
+            resolve({code: 200, data: data})
         })
 
         return promise
@@ -707,13 +707,13 @@ class DebugDataProvider extends Parent.AbstractDataProvider
                 let entry = gDebugDataProviderData.foods.at(i)
                 if (entry.id == id)
                 {
-                    resolve(entry)
+                    resolve({code: 200, data: entry})
                     return
                 }
             }
 
             // id not found.
-            resolve(JSON.parse('{}'))
+            resolve({code: 404, data: null})
         })
 
         return promise
@@ -733,7 +733,7 @@ class DebugDataProvider extends Parent.AbstractDataProvider
             // Add entry.
             gDebugDataProviderData.foods.push(data)
 
-            resolve(JSON.parse('{"id": ' + data.id + '}'))
+            resolve({code: 200, data: JSON.parse('{"id": ' + data.id + '}')})
         })
 
         return promise
@@ -749,13 +749,13 @@ class DebugDataProvider extends Parent.AbstractDataProvider
                 if (entry.id == id)
                 {
                     gDebugDataProviderData.foods.splice(i, 1)
-                    resolve(JSON.parse('{"code": "OK"}'))
+                    resolve({code: 200, data: null})
                     return
                 }
             }
 
             // id not found.
-            resolve(JSON.parse('{"code": "Not Found"}'))
+            resolve({code: 404, data: null})
         })
 
         return promise
@@ -771,13 +771,13 @@ class DebugDataProvider extends Parent.AbstractDataProvider
                 if (entry.id == object.id)
                 {
                     gDebugDataProviderData.foods[i] = object
-                    resolve(JSON.parse('{"code": "OK"}'))
+                    resolve({code: 200, data: entry})
                     return
                 }
             }
 
             // id not found.
-            resolve(JSON.parse('{"code": "Not Found"}'))
+            resolve({code: 404, data: null})
         })
 
         return promise

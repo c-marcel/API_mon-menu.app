@@ -4,6 +4,21 @@
 
 var Parent = require('./AbstractEntryPoint')
 
+/**
+  * @api {post} /createFood Create a new food entry
+  * @apiDescription Create a new empty food entry into database and return entry id.
+  * @apiName createFood
+  * @apiGroup Foods
+  * @apiVersion 1.0.0
+  *
+  * @apiSuccess {Number} id Food identifier as number.
+  * 
+  * @apiSuccessExample {json} Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {
+  *         "id": 126
+  *     }
+  */
 class CreateFood extends Parent.AbstractEntryPoint
 {
     constructor()
@@ -14,7 +29,11 @@ class CreateFood extends Parent.AbstractEntryPoint
     executeImplementation(req, res)
     {
         let promise = this.dataProvider.createFood()
-        promise.then(data => res.send(data))
+        promise.then(data =>
+        {
+            res.status(data.code)
+            res.send(data.data)
+        })
     }
 }
 

@@ -55,18 +55,18 @@ class AbstractDataProvider
 
     // Delete a food entry.
     // 'id' parameter is an integer that uniquely identify a database entry.
-    // This method returns a Promise that will return data as JSON.
+    // This method returns a Promise that will return HTTP response code.
     deleteFood(id)
     {
-        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
+        return new Promise((resolve, reject) => { resolve(404)})
     }
 
     // Update a food entry.
     // 'object' is the food entry (with all fields).
-    // This method returns a Promise that will return data as JSON.
+    // This method returns a Promise that will return HTTP response code.
     updateFood(object)
     {
-        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
+        return new Promise((resolve, reject) => { resolve(404)})
     }
 
     // Disconnect from data provider.

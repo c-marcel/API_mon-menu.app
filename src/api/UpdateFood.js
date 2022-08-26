@@ -4,6 +4,14 @@
 
 var Parent = require('./AbstractEntryPoint')
 
+/**
+  * @api {put} /updateFood Update a food entry
+  * @apiDescription Update a food entry into database. Entry content must be provided into request body as JSON object.
+  * Stored entry will be returned into answer body as JSON object.
+  * @apiName updateFood
+  * @apiGroup Foods
+  * @apiVersion 1.0.0
+  */
 class UpdateFood extends Parent.AbstractEntryPoint
 {
     constructor()
@@ -14,7 +22,11 @@ class UpdateFood extends Parent.AbstractEntryPoint
     executeImplementation(req, res)
     {
         let promise = this.dataProvider.updateFood(req.body)
-        promise.then(data => res.send(data))
+        promise.then(data =>
+        {
+            res.status(data.code)
+            res.send(data.data)
+        })
     }
 }
 

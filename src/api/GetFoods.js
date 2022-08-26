@@ -43,7 +43,11 @@ class GetFoods extends Parent.AbstractEntryPoint
     executeImplementation(req, res)
     {
         let promise = this.dataProvider.getFoods()
-        promise.then(data => res.send(data))
+        promise.then(data => 
+        {
+            res.status(data.code)
+            res.send(data.data)
+        })
     }
 }
 

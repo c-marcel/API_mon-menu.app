@@ -37,6 +37,16 @@ const g_app = express()
 g_app.use(express.static('public'));
 g_app.use(express.json());
 
+// Catch invalid JSON body.
+g_app.use((err, req, res, next) =>
+{
+    if (err.status == 400 && err.type == 'entity.parse.failed')
+    {
+        res.status(err.status)
+        res.send(JSON.parse('{"error": "Invalid JSON", "details": "Cannot parse body as JSON object"}'))
+    }
+})
+
 // Install Api.
 installApi(g_app, dataProvider)
 

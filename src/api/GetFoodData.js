@@ -196,7 +196,11 @@ class GetFoodData extends Parent.AbstractEntryPoint
         let id = req.params.id
 
         let promise = this.dataProvider.getFoodData(id)
-        promise.then(data => res.send(data))
+        promise.then((data) =>
+        {
+            res.status(data.code)
+            res.send(data.data)
+        })
     }
 }
 
