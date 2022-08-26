@@ -5,5 +5,7 @@ Data sources can be:
 * PostgreSQL database connection
 * In-memory connection for debug only (local and volatile)
 
+API documentation is available at the root URL /.
+
 **Language:** Node.js  
 **License:** GNU Affero GPL
