@@ -30,18 +30,18 @@ class AbstractDataProvider
     }
 
     // Get foods list (fields: id, title, details).
-    // Return data as stringified JSON.
+    // This method returns a Promise that will return data as JSON.
     getFoods()
     {
-        return '{}'
+        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
     }
 
     // Get data for specific food identified by id field.
     // 'id' parameter is an integer that uniquely identify a database entry.
-    // Return data as stringified JSON.
+    // This method returns a Promise that will return data as JSON.
     getFoodData(id)
     {
-        return '{}'
+        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
     }
 
     // Disconnect from data provider.

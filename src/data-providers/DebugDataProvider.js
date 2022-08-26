@@ -4,6 +4,7 @@
 
 // This data provider ('debug') is a local and volatile database
 // for debug purpose only.
+// This provider requires no options.
 
 var Parent = require('./AbstractDataProvider')
 
@@ -534,45 +535,56 @@ class DebugDataProvider extends Parent.AbstractDataProvider
         super("Local and volatile database storage. For debug only.");
     }
 
-    connect()
+    connect(options)
     {
         return true
     }
 
     getFoods()
     {
-        // Extract only the id, title and details fields from data.
-        let data = {foods: []}
-
-        for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
+        var promise = new Promise((resolve, reject) =>
         {
-            let entry  = gDebugDataProviderData.foods.at(i)
-            let copied =
+            // Extract only the id, title and details fields from data.
+            let data = {foods: []}
+
+            for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
             {
-                id:      entry.id,
-                title:   entry.title,
-                details: entry.details
+                let entry  = gDebugDataProviderData.foods.at(i)
+                let copied =
+                {
+                    id:      entry.id,
+                    title:   entry.title,
+                    details: entry.details
+                }
+
+                data.foods.push(copied)
             }
 
-            data.foods.push(copied)
-        }
+            resolve(data)
+        })
 
-        return JSON.stringify(data)
+        return promise
     }
 
     getFoodData(id)
     {
-        for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
+        var promise = new Promise((resolve, reject) =>
         {
-            let entry = gDebugDataProviderData.foods.at(i)
-            if (entry.id == id)
+            for (let i = 0 ; i < gDebugDataProviderData.foods.length ; i++)
             {
-                return JSON.stringify(entry)
+                let entry = gDebugDataProviderData.foods.at(i)
+                if (entry.id == id)
+                {
+                    resolve(entry)
+                    return
+                }
             }
-        }
 
-        // id not found.
-        return '{}'
+            // id not found.
+            resolve(JSON.parse('{}'))
+        })
+
+        return promise
     }
 }
 

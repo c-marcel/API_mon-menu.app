@@ -5,8 +5,10 @@
 // This factory creates a data provider by providing its type.
 // Available types:
 // 'debug' - local and volatile database (for debug purpose only).
+// 'postgresql' - PostgreSQL database connection.
 
-var DebugDataProvider = require('./DebugDataProvider')
+var DebugDataProvider      = require('./DebugDataProvider')
+var PostgreSQLDataProvider = require('./PostgreSQLDataProvider')
 
 // Create a data provider by type.
 // Return null on error.
@@ -14,6 +16,9 @@ function createDataProvider(type)
 {
     if (type === 'debug')
         return new DebugDataProvider.DebugDataProvider();
+
+    if (type === 'postgresql')
+        return new PostgreSQLDataProvider.PostgreSQLDataProvider();
 
     // Type not found.
     return null;
