@@ -9,6 +9,7 @@ var Parent = require('./AbstractEntryPoint')
   * @apiDescription Update a food entry into database. Entry content must be provided into request body as JSON object.
   * Stored entry will be returned into answer body as JSON object.
   * @apiName updateFood
+  * @apiHeader {String} auth-token Authentication token (private Api).
   * @apiGroup Foods
   * @apiVersion 1.0.0
   */
@@ -16,7 +17,7 @@ class UpdateFood extends Parent.AbstractEntryPoint
 {
     constructor()
     {
-        super('updateFood')
+        super('updateFood', true)
     }
 
     executeImplementation(req, res)

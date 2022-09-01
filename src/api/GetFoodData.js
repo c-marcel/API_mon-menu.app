@@ -187,7 +187,7 @@ class GetFoodData extends Parent.AbstractEntryPoint
 {
     constructor()
     {
-        super('getFoodData')
+        super('getFoodData', false)
     }
 
     executeImplementation(req, res)

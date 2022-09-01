@@ -37,7 +37,7 @@ class GetFoods extends Parent.AbstractEntryPoint
 {
     constructor()
     {
-        super('getFoods')
+        super('getFoods', false)
     }
 
     executeImplementation(req, res)

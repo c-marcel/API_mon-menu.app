@@ -10,6 +10,8 @@ var Parent = require('./AbstractEntryPoint')
   * @apiName createFood
   * @apiGroup Foods
   * @apiVersion 1.0.0
+  * @apiPrivate
+  * @apiHeader {String} auth-token Authentication token (private Api).
   *
   * @apiSuccess {Number} id Food identifier as number.
   * 
@@ -23,7 +25,7 @@ class CreateFood extends Parent.AbstractEntryPoint
 {
     constructor()
     {
-        super('createFood')
+        super('createFood', true)
     }
 
     executeImplementation(req, res)

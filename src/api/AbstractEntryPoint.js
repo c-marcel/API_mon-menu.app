@@ -28,10 +28,11 @@ function createErrorAnswer(error, details)
 class AbstractEntryPoint
 {
     // 'entryPoint' parameter is the name of the entry point.
-    constructor(entryPoint)
+    constructor(entryPoint, privateEntryPoint)
     {
-        this.entryPoint = entryPoint
-        this.config     = new config.Config()
+        this.entryPoint             = entryPoint
+        this.config                 = new config.Config()
+        this.authentificationNeeded = privateEntryPoint
 
         // Needed to use 'this' by super when passing function pointer.
         this.exec = this.exec.bind(this)
@@ -45,14 +46,17 @@ class AbstractEntryPoint
     exec(req, res)
     {
         // Check for authentification.
-        // Based on a constant token defined into Http headers.
-        let authToken = String(req.headers["auth-token"])
-        if (authToken !== this.config.providers.authenticationToken)
+        // Based on a constant token defined into Http headers ('auth-token').
+        if (this.authentificationNeeded)
         {
-            res.status(401)
-            res.send(createErrorAnswer('Authentication error', 
-                                       'No auth-token HTTP header defined or bad token.'))
-            return
+            let authToken = String(req.headers["auth-token"])
+            if (authToken !== this.config.providers.authenticationToken)
+            {
+                res.status(401)
+                res.send(createErrorAnswer('Authentication error', 
+                                           'No auth-token HTTP header defined or bad token.'))
+                return
+            }
         }
 
         this.executeImplementation(req, res)
