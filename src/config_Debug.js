@@ -27,7 +27,10 @@ class Config
 
                 // Data provider option (object).
                 options:    null
-            }
+            },
+
+            // Api token for private access.
+            authenticationToken: "TOKEN"
         }
     }
 }

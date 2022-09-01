@@ -6,15 +6,24 @@
 // point for the Api. Each entry point must inherit from this parent
 // class and implement the method executeImplementation().
 
+// Try to load config file.
+var config = null
+try
+{
+    config = require('../config')
+}
+catch
+{
+    console.error("Fatal error: cannot find 'config.js' file into 'src' directory.")
+    console.error("Please create 'src/config.js' file from provided templates.")
+
+    process.exit([1]);
+}
+
 function createErrorAnswer(error, details)
 {
     return JSON.parse('{"error": "' + error + '", "details": "' + details + '"}')
 }
-
-// Authentication token.
-// In the current version, authentication is done through a hard-coded
-// token that must be passed into Http(s) header 'auth-token'.
-const ApiConstantToken = '1e91ccce-9a8d-45a8-8d72-0decd3549a12'
 
 class AbstractEntryPoint
 {
@@ -22,6 +31,7 @@ class AbstractEntryPoint
     constructor(entryPoint)
     {
         this.entryPoint = entryPoint
+        this.config     = new config.Config()
 
         // Needed to use 'this' by super when passing function pointer.
         this.exec = this.exec.bind(this)
@@ -37,7 +47,7 @@ class AbstractEntryPoint
         // Check for authentification.
         // Based on a constant token defined into Http headers.
         let authToken = String(req.headers["auth-token"])
-        if (authToken !== ApiConstantToken)
+        if (authToken !== this.config.providers.authenticationToken)
         {
             res.status(401)
             res.send(createErrorAnswer('Authentication error', 

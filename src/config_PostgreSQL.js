@@ -34,7 +34,10 @@ class Config
                     password:   "password",     //< Password for connection.
                     database:   "db_name"       //< Database name.
                 }
-            }
+            },
+
+            // Api token for private access.
+            authenticationToken: "TOKEN"
         }
     }
 }
