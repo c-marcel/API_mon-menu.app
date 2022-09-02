@@ -1,11 +1,23 @@
 # API mon-menu.app
-This project contains the API used by the website [mon-menu.app](https://mon-menu.app). The API exposes data about foods and recipes and supports basic CRUD operations.
 
-Data sources can be:
-* PostgreSQL database connection
-* In-memory connection for debug only (local and volatile)
+**Langage :** Node.js  
+**Licence :** GNU Affero GPL
 
-API documentation is available at the root URL /.
+Ce projet contient le code source de l'API servant de back-end pour le site [mon-menu.app](https://mon-menu.app). Elle permet de fournir les services suivants :
 
-**Language:** Node.js  
-**License:** GNU Affero GPL
+* Gestion des utilisateurs,
+* Gestion des aliments (en lecture seule pour la partie publique, et écriture pour la partie privée),
+* [à venir] Gestion des recettes.
+
+Les données exposées au travers de l'API peuvent provenir :
+
+* D'une base de données PostgreSQL,
+* D'un connecteur local (données volatiles, pour débogage uniquement).
+
+La documentation de l'API est disponible à la racine du répertoire d'installation, par exemple [api.mon-menu.app](https://api.mon-menu.app).
+
+## Installation
+
+1. Dans le répertoire **src**, créer un fichier **config.js** à partir d'un exemple (conseillé : **config_PostgreSQL.js**) et modifier son contenu pour pouvoir se connecter à la source de données.
+
+2. Lancer le serveur.
