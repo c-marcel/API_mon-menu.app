@@ -28,11 +28,12 @@ function createErrorAnswer(error, details)
 class AbstractEntryPoint
 {
     // 'entryPoint' parameter is the name of the entry point.
+    // 'privateEntryPoint' parameter define if this entry point requires authentication check.
     constructor(entryPoint, privateEntryPoint)
     {
         this.entryPoint             = entryPoint
-        this.config                 = new config.Config()
         this.authentificationNeeded = privateEntryPoint
+        this.config                 = new config.Config()
 
         // Needed to use 'this' by super when passing function pointer.
         this.exec = this.exec.bind(this)

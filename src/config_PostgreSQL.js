@@ -4,7 +4,8 @@
 
 // Config object contains all the configuation parameters
 // when executing the Api.
-// This file shows configuration example for PostgreSQL data provider.
+// This file shows configuration example for PostgreSQL data provider
+// and user manager.
 class Config
 {
     constructor()

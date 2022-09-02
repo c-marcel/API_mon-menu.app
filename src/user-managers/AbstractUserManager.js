@@ -2,7 +2,7 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
-// Abstract object representing an users manager.
+// Abstract object representing users manager.
 // User managers must inherit from this class and implement
 // the methods: connect(), getUserData(), isTokenValid(), disconnect().
 class AbstractUserManager

@@ -15,6 +15,9 @@ var Parent = require('./AbstractEntryPoint')
   * @apiName connect
   * @apiGroup Users
   * @apiVersion 1.0.0
+  * 
+  * @apiQuery {String} username Username.
+  * @apiQuery {String} password Password.
   *
   * @apiSuccess {String} level User level ('user' or 'admin').
   * @apiSuccess {String} auth-token Authentication token for 'admin' level.

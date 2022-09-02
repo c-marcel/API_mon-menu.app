@@ -4,7 +4,8 @@
 
 // Config object contains all the configuation parameters
 // when executing the Api.
-// This file shows configuration example for Debug data provider.
+// This file shows configuration example for Debug data provider
+// and user manager.
 class Config
 {
     constructor()
