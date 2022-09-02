@@ -4,6 +4,7 @@
 
 // Load modules.
 const dpf     = require('./src/data-providers/DataProviderFactory')
+const umf     = require('./src/user-managers/UserManagerFactory')
 const config  = require('./src/config')
 const express = require('express');
 
@@ -31,6 +32,24 @@ if (!dataProvider.connect(g_config.providers.data.options))
     process.exit()
 }
 
+// Create user manager.
+const userManagerType = g_config.providers.users.type
+var   userManager     = umf.createUserManager(userManagerType)
+if (!userManager)
+{
+    console.error('Unknown user manager type: \'' + userManagerType + '\'. Quit.')
+    process.exit()
+}
+else
+    console.log('Using user manager: \'' + userManager.description() + '\'')
+
+// Connect to user manager.
+if (!userManager.connect(g_config.providers.users.options))
+{
+    console.error('Cannot open user manager connection. Quit.')
+    process.exit()
+}
+
 // Create application.
 const g_app = express()
 
@@ -48,7 +67,7 @@ g_app.use((err, req, res, next) =>
 })
 
 // Install Api.
-installApi(g_app, dataProvider)
+installApi(g_app, dataProvider, userManager)
 
 // Start server.
 // Note: there is no need to use TLS because this server will communicate

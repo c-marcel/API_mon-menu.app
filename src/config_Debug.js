@@ -29,8 +29,15 @@ class Config
                 options:    null
             },
 
-            // Api token for private access.
-            authenticationToken: "TOKEN"
+            // Api user manager options.
+            users:
+            {
+                // Data provider type. See src/user-managers.
+                type: 'debug',
+                
+                // User manager option (object).
+                options:    null
+            }
         }
     }
 }

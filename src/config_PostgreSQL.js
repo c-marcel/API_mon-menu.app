@@ -36,8 +36,22 @@ class Config
                 }
             },
 
-            // Api token for private access.
-            authenticationToken: "TOKEN"
+            // Api user manager options.
+            users:
+            {
+                // Data provider type. See src/user-managers.
+                type: 'postgresql',
+
+                // Data provider option (object).
+                options:
+                {
+                    host:       "localhost",    //< Hostname for the database server.
+                    port:       5432,           //< Port used for PostgreSQL server.
+                    user:       "username",     //< Username for connection.
+                    password:   "password",     //< Password for connection.
+                    database:   "db_name"       //< Database name.
+                }
+            }
         }
     }
 }

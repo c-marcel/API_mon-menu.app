@@ -43,6 +43,11 @@ class AbstractEntryPoint
         this.dataProvider = dataProvider
     }
 
+    setUserManager(userManager)
+    {
+        this.userManager = userManager
+    }
+
     exec(req, res)
     {
         // Check for authentification.
@@ -50,7 +55,7 @@ class AbstractEntryPoint
         if (this.authentificationNeeded)
         {
             let authToken = String(req.headers["auth-token"])
-            if (authToken !== this.config.providers.authenticationToken)
+            if (!this.userManager.isTokenValid(authToken))
             {
                 res.status(401)
                 res.send(createErrorAnswer('Authentication error', 
