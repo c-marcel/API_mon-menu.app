@@ -10,7 +10,7 @@
 // * 'password': database server password
 // * 'database': database name
 
-const { Pool } = require("pg");
+var Client  = require('pg-native');
 
 var Parent = require('./AbstractUserManager')
 var bcrypt = require("bcrypt")
@@ -24,49 +24,58 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
 
     connect(options)
     {
-        this.pool = new Pool(options)
+        this.client = new Client()
+        this.client.connectSync("postgresql://" + options.user + ":" + options.password + "@" + options.host + ":" + options.port + "/" + options.database)
         return true
     }
 
     disconnect(options)
     {
-        this.pool.end()
+        this.client = null
     }
 
     getUserData(username, password)
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("SELECT * FROM users WHERE username = $1", [username]).then(function(res)
+            let res = this.client.querySync("SELECT * FROM users WHERE username = $1", [username])
+
+            if (res.length == 0)
             {
-                if (res.rowCount == 0)
-                {
-                    resolve({code: 401, data: null})
-                }
+                resolve({code: 401, data: null})
+            }
 
-                else if (res.rowCount == 1)
+            else if (res.length == 1)
+            {
+                bcrypt.compare(password, res[0].passwordHash, function(err, result)
                 {
-                    bcrypt.compare(password, res.rows[0].passwordHash, function(err, result)
+                    if (result)
                     {
-                        if (result)
-                            resolve({code: 200, data: {level: res.rows[0].level, token: res.rows[0].authToken}})
-                        
-                        else
-                            resolve({code: 401, data: null})
-                    });
-                }
+                        resolve({code: 200, data: {level: res[0].level, token: res[0].authToken}})
+                    }
+                    
+                    else
+                        resolve({code: 401, data: null})
+                });
+            }
 
-                else
-                {
-                    resolve({code: 500, data: null})
-                }
-            }).catch(e =>
+            else
             {
                 resolve({code: 500, data: null})
-            })
+            }
         })
 
         return promise
+    }
+
+    isTokenValid(token)
+    {
+        let res = this.client.querySync("SELECT * FROM users WHERE \"authToken\" = $1", [token])
+
+        if (res.length != 1)
+            return false
+
+        return true
     }
 }
 
