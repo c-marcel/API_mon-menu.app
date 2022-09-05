@@ -145,14 +145,16 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                                               \"supplyArea\" = $4, \
                                               cost = $5, \
                                               \"environmentalImpact\" = $6, \
-                                              nutrition = $7 \
-                                              WHERE id = $8 RETURNING *", [object.title,
+                                              nutrition = $7, \
+                                              units = $8 \
+                                              WHERE id = $9 RETURNING *", [object.title,
                                                                object.details,
                                                                object.months,
                                                                object.supplyArea,
                                                                object.cost,
                                                                object.environmentalImpact,
                                                                object.nutrition,
+                                                               object.units,
                                                                object.id]).then(function(res)
             {
                 if (res.rowCount == 1)
