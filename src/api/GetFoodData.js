@@ -51,6 +51,7 @@ var Parent = require('./AbstractEntryPoint')
   * @apiSuccess {Object} food.nutrition.zinc Object containing zinc data (value: in kg per kg, source: source of the data).
   * @apiSuccess {Object} food.nutrition.vitamin_c Object containing C vitamin data (value: in kg per kg, source: source of the data).
   * @apiSuccess {Object} food.nutrition.vitamin_d Object containing D vitamin data (value: in kg per kg, source: source of the data).
+  * @apiSuccess {Object} food.units (optional) Object containing display unit ('label' and 'conversion' attributes).
   * 
   * @apiSuccessExample {json} Success-Response:
   *     HTTP/1.1 200 OK
