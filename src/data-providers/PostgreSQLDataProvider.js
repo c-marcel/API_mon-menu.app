@@ -10,6 +10,8 @@
 // * 'password': database server password
 // * 'database': database name
 
+const pgp = require('pg-promise')();
+
 const { Pool } = require("pg");
 
 var Parent = require('./AbstractDataProvider')
@@ -173,6 +175,89 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         })
 
         return promise
+    }
+
+    dump()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            var data = {foods: []}
+
+            this.pool.query("SELECT * FROM foods").then(function(res)
+            {
+                for (let i = 0 ; i < res.rowCount ; i++)
+                {
+                    var item = res.rows[i]
+                    data.foods.push(item)
+                }
+
+                resolve({code: 200, data: data})
+            }).catch(e =>
+            {
+                resolve({code: 500, data: null})
+            })
+        })
+
+        return promise;
+    }
+
+    restore(data)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            let lthis = this;
+
+            // Drop create table.
+            this.pool.query("DROP TABLE foods").then(function(res)
+            {
+                // Create table.
+                lthis.pool.query("CREATE TABLE foods (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));").then(function(res)
+                {
+                    // Add all data.
+                    const queries = [];
+
+                    for (let i = 0 ; i < data.foods.length ; i++)
+                    {
+                        var entry = data.foods[i];
+                        var query = 
+                        {
+                            query:  "INSERT INTO foods (title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition, units) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+                            values:
+                            [
+                                entry.title,
+                                entry.details,
+                                entry.months,
+                                entry.supplyArea,
+                                entry.cost,
+                                entry.environmentalImpact,
+                                entry.nutrition,
+                                entry.units
+                            ]
+                        }
+
+                        queries.push(query);
+                    }
+
+                    const sql = pgp.helpers.concat(queries);
+                    
+                    lthis.pool.query(sql).then(function(res)
+                    {
+                        resolve({code: 200, data: null})
+                    }).catch(e =>
+                    {
+                        resolve({code: 500, data: null})
+                    })
+                }).catch(e =>
+                {
+                    resolve({code: 500, data: null})
+                })
+            }).catch(e =>
+            {
+                resolve({code: 500, data: null})
+            })
+        })
+
+        return promise;
     }
 }
 

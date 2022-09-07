@@ -12,6 +12,8 @@ var CreateFood  = require('./CreateFood')
 var DeleteFood  = require('./DeleteFood')
 var UpdateFood  = require('./UpdateFood')
 var Connect     = require('./Connect')
+var Dump        = require('./Dump')
+var Restore     = require('./Restore')
 
 // Install a specific entry point.
 // 'app' parameter is the express application.
@@ -68,6 +70,8 @@ function installApi(app, dataProvider, userManager)
     installEntryPoint(app, dataProvider, userManager, '/deleteFood/:id',  'DeleteFood',  'delete')
     installEntryPoint(app, dataProvider, userManager, '/updateFood',      'UpdateFood',  'put'   )
     installEntryPoint(app, dataProvider, userManager, '/connect',         'Connect',     'get'   )
+    installEntryPoint(app, dataProvider, userManager, '/dump',            'Dump',        'get'   )
+    installEntryPoint(app, dataProvider, userManager, '/restore',         'Restore',     'post'  )
 }
 
 module.exports = { installApi }

@@ -782,6 +782,27 @@ class DebugDataProvider extends Parent.AbstractDataProvider
 
         return promise
     }
+
+    dump()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            resolve({code: 200, data: gDebugDataProviderData})
+        })
+
+        return promise;
+    }
+
+    restore(data)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            gDebugDataProviderData = data;
+            resolve({code: 200, data: null})
+        })
+
+        return promise;
+    }
 }
 
 module.exports.DebugDataProvider = DebugDataProvider

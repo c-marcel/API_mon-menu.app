@@ -105,3 +105,4 @@ dist
 
 # Config.
 src/config.js
+src/config_*
