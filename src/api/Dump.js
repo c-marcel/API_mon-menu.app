@@ -13,7 +13,7 @@ var Parent = require('./AbstractEntryPoint')
   * @apiPrivate
   * @apiHeader {String} auth-token Authentication token (private Api).
   *
-  * @apiSuccess {Objetc} foods Object containing all database objects.
+  * @apiSuccess {Object} foods Object containing all database objects.
   */
 class Dump extends Parent.AbstractEntryPoint
 {
