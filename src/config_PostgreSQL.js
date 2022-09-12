@@ -2,10 +2,9 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
-// Config object contains all the configuation parameters
+// Config object contains all the configuration parameters
 // when executing the Api.
-// This file shows configuration example for PostgreSQL data provider
-// and user manager.
+// This file shows configuration example for PostgreSQL provider.
 class Config
 {
     constructor()
@@ -18,40 +17,19 @@ class Config
         }
 
         // Api providers options.
-        this.providers =
+        this.provider =
         {
-            // Api data providers options.
-            data:
+            // Provider type: 'debug' or 'postgresql'.
+            type:       'postgresql',
+
+            // Provider option (object).
+            options:
             {
-                // Data provider type. See src/data-providers.
-                type:       'postgresql',
-
-                // Data provider option (object).
-                options:
-                {
-                    host:       "localhost",    //< Hostname for the database server.
-                    port:       5432,           //< Port used for PostgreSQL server.
-                    user:       "username",     //< Username for connection.
-                    password:   "password",     //< Password for connection.
-                    database:   "db_name"       //< Database name.
-                }
-            },
-
-            // Api user manager options.
-            users:
-            {
-                // Data provider type. See src/user-managers.
-                type: 'postgresql',
-
-                // Data provider option (object).
-                options:
-                {
-                    host:       "localhost",    //< Hostname for the database server.
-                    port:       5432,           //< Port used for PostgreSQL server.
-                    user:       "username",     //< Username for connection.
-                    password:   "password",     //< Password for connection.
-                    database:   "db_name"       //< Database name.
-                }
+                host:       "localhost",    //< Hostname for the database server.
+                port:       5432,           //< Port used for PostgreSQL server.
+                user:       "username",     //< Username for connection.
+                password:   "password",     //< Password for connection.
+                database:   "db_name"       //< Database name.
             }
         }
     }

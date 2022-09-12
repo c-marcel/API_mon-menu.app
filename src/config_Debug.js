@@ -2,10 +2,9 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
-// Config object contains all the configuation parameters
+// Config object contains all the configuration parameters
 // when executing the Api.
-// This file shows configuration example for Debug data provider
-// and user manager.
+// This file shows configuration example for Debug provider.
 class Config
 {
     constructor()
@@ -17,28 +16,14 @@ class Config
             port: 3000
         }
 
-        // Api providers options.
-        this.providers =
+        // Api provider for data and users.
+        this.provider =
         {
-            // Api data providers options.
-            data:
-            {
-                // Data provider type. See src/data-providers.
-                type:       'debug',
+            // Provider type: 'debug' or 'postgresql'.
+            type:       'debug',
 
-                // Data provider option (object).
-                options:    null
-            },
-
-            // Api user manager options.
-            users:
-            {
-                // Data provider type. See src/user-managers.
-                type: 'debug',
-                
-                // User manager option (object).
-                options:    null
-            }
+            // Provider option (object).
+            options:    null
         }
     }
 }

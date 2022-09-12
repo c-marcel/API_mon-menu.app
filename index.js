@@ -15,36 +15,34 @@ const { installApi } = require('./src/api/Api');
 const g_config = new config.Config();
 
 // Create data provider.
-const dataProviderType = g_config.providers.data.type
-var   dataProvider     = dpf.createDataProvider(dataProviderType)
+var dataProvider = dpf.createDataProvider(g_config.provider.type)
 if (!dataProvider)
 {
-    console.error('Unknown data provider type: \'' + dataProviderType + '\'. Quit.')
+    console.error('Unknown data provider type: \'' + g_config.provider.type + '\'. Quit.')
     process.exit()
 }
 else
     console.log('Using data provider: \'' + dataProvider.description() + '\'')
 
 // Connect to data provider.
-if (!dataProvider.connect(g_config.providers.data.options))
+if (!dataProvider.connect(g_config.provider.options))
 {
     console.error('Cannot open data provider connection. Quit.')
     process.exit()
 }
 
 // Create user manager.
-const userManagerType = g_config.providers.users.type
-var   userManager     = umf.createUserManager(userManagerType)
+var userManager = umf.createUserManager(g_config.provider.type)
 if (!userManager)
 {
-    console.error('Unknown user manager type: \'' + userManagerType + '\'. Quit.')
+    console.error('Unknown user manager type: \'' + g_config.provider.type + '\'. Quit.')
     process.exit()
 }
 else
     console.log('Using user manager: \'' + userManager.description() + '\'')
 
 // Connect to user manager.
-if (!userManager.connect(g_config.providers.users.options))
+if (!userManager.connect(g_config.provider.options))
 {
     console.error('Cannot open user manager connection. Quit.')
     process.exit()
