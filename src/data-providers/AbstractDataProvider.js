@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // Abstract object representing a data provider.
 // Data providers must inherit from this class and implement
 // the methods: connect(), getFoods(), getFoodData(), createFood(),

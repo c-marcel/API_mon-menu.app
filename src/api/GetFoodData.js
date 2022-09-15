@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // The GetFoodData object implements the '/getFoodData/:id' entry point that
 // returns all data for a specific food entry. Food is identified with the
 // :id parameter that is compared with the id field into database objects.

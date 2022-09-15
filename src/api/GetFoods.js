@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // The GetFoods object implements the '/getFoods' entry point that
 // returns all foods into database (fields: id, title, details).
 

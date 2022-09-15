@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // Config object contains all the configuration parameters
 // when executing the Api.
 // This file shows configuration example for PostgreSQL provider.

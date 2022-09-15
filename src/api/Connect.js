@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // The Connect object implements the '/connect' entry point that
 // permits to user to connect to the private part of the Api.
 

@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // Load modules.
 const dpf     = require('./src/data-providers/DataProviderFactory')
 const umf     = require('./src/user-managers/UserManagerFactory')

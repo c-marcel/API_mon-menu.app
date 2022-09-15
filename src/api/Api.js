@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // The installApi() method will install all entry points for the Api.
 // Each entry point is implemented into a class in separate files.
 

@@ -2,6 +2,8 @@
 // This file is licensed under the GNU Affero GPL v3.
 // License text available at https://www.gnu.org/licenses/agpl-3.0.txt
 
+"use strict";
+
 // This data provider ('postgresql') connects to a PostgreSQL database.
 // Connection options are:
 // * 'host': database server host
