@@ -10,7 +10,7 @@
 var Parent = require('./AbstractEntryPoint')
 
 /**
-  * @api {get} /disconnect Disconnect user to private Api
+  * @api {get} /disconnect Disconnect user from private Api
   * @apiDescription Disconnet user (use session).
   * @apiName disconnect
   * @apiGroup Users
