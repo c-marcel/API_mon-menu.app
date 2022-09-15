@@ -34,6 +34,13 @@ class Config
                 database:   "db_name"       //< Database name.
             }
         }
+
+        // Authentication options.
+        this.authentication =
+        {
+            // Authentication delay in ms.
+            delayMs:    500
+        }
     }
 }
 

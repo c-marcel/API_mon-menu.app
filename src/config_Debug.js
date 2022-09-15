@@ -27,6 +27,13 @@ class Config
             // Provider option (object).
             options:    null
         }
+
+        // Authentication options.
+        this.authentication = 
+        {
+            // Authentication delay in ms.
+            delayMs:    500
+        }
     }
 }
 

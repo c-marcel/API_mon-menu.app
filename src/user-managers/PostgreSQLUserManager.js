@@ -36,9 +36,9 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
         this.client = null
     }
 
-    getUserData(username, password)
+    getUserData(username, password, resolve)
     {
-        var promise = new Promise((resolve, reject) =>
+        var promise = new Promise((r, reject) =>
         {
             let res = this.client.querySync("SELECT * FROM users WHERE username = $1", [username])
 

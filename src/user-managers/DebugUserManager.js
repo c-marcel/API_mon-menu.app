@@ -41,9 +41,9 @@ class DebugUserManager extends Parent.AbstractUserManager
         return true
     }
 
-    getUserData(username, password)
+    getUserData(username, password, resolve)
     {
-        var promise = new Promise((resolve, reject) =>
+        var promise = new Promise((r, reject) =>
         {
             let userNotFound = true;
 

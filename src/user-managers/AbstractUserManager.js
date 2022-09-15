@@ -4,9 +4,17 @@
 
 "use strict";
 
+const config = require('../config')
+
+// Load configuration.
+const g_config = new config.Config();
+
 // Abstract object representing users manager.
 // User managers must inherit from this class and implement
 // the methods: connect(), getUserData(), isTokenValid(), disconnect().
+//
+// Note that getUserData() is not called directly but with a delay
+// to avoid brute force attacks (through the getUserDataDelayed() function).
 class AbstractUserManager
 {
     // The 'description' parameter is a string for describing each manager.
@@ -35,9 +43,20 @@ class AbstractUserManager
     // This method returns a Promise that will return data as JSON.
     // 'username' is the user login.
     // 'password' is the user password before hash.
-    getUserData(username, password)
+    // 'resolve' is the resolve function from the initial promise.
+    getUserData(username, password, resolve)
     {
-        return new Promise((resolve, reject) => { resolve(JSON.parse('{}'))})
+        return new Promise((r, reject) => { resolve({code: 500, data: null}) })
+    }
+
+    // Get user data if credentials are valid. Apply a delay defined into 
+    // configuration to avoid brute force attacks.
+    // This method returns a Promise that will return data as JSON.
+    // 'username' is the user login.
+    // 'password' is the user password before hash.
+    getUserDataDelayed(username, password)
+    {
+        return new Promise(resolve => setTimeout(() => { this.getUserData(username, password, resolve) }, g_config.authentication.delayMs));
     }
 
     // Check if authentication token is valid.

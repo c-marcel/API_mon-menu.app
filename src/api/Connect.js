@@ -44,7 +44,7 @@ class Connect extends Parent.AbstractEntryPoint
         let username = req.query.username
         let password = req.query.password
 
-        let promise = this.userManager.getUserData(username, password)
+        let promise = this.userManager.getUserDataDelayed(username, password)
         promise.then(data => 
         {
             res.status(data.code)
