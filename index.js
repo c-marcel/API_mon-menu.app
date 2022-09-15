@@ -7,6 +7,8 @@
 // Load modules.
 const dpf     = require('./src/data-providers/DataProviderFactory')
 const umf     = require('./src/user-managers/UserManagerFactory')
+const sqlite  = require('better-sqlite3')
+const session = require('express-session')
 const config  = require('./src/config')
 const express = require('express');
 
@@ -50,11 +52,22 @@ if (!userManager.connect(g_config.provider.options))
     process.exit()
 }
 
+// Create user sessions storage.
+const SqliteStore         = require("better-sqlite3-session-store")(session)
+const userSessionsDatabse = new sqlite("userSessions.sqlite3");
+const sessionStore        = new SqliteStore({ client: userSessionsDatabse })
+
 // Create application.
 const g_app = express()
 
 g_app.use(express.static('public'));
 g_app.use(express.json());
+g_app.use(session(
+{
+    store:              sessionStore,
+    secret:             g_config.server.cookies.secret,
+    saveUninitialized:  g_config.server.cookies.saveUninitialized
+}))
 
 // Catch invalid JSON body.
 g_app.use((err, req, res, next) =>

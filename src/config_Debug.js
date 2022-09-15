@@ -15,7 +15,14 @@ class Config
         this.server = 
         {
             // Port on which Api will serve.
-            port: 3000
+            port: 3000,
+
+            // Cookies options.
+            cookies:
+            {
+                secret:             ["secret1", "secret2"],
+                saveUninitialized:  false
+            }
         }
 
         // Api provider for data and users.

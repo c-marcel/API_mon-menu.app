@@ -13,7 +13,6 @@ var Parent = require('./AbstractEntryPoint')
   * @apiGroup Foods
   * @apiVersion 1.0.0
   * @apiPrivate
-  * @apiHeader {String} auth-token Authentication token (private Api).
   *
   * @apiSuccess {Number} id Food identifier as number.
   * 

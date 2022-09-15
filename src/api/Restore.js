@@ -13,7 +13,6 @@ var Parent = require('./AbstractEntryPoint')
   * @apiGroup Tools
   * @apiVersion 1.0.0
   * @apiPrivate
-  * @apiHeader {String} auth-token Authentication token (private Api).
   */
 class Restore extends Parent.AbstractEntryPoint
 {

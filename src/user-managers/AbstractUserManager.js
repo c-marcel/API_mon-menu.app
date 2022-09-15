@@ -71,14 +71,6 @@ class AbstractUserManager
         return new Promise(resolve => setTimeout(() => { this.getUserData(username, password, resolve) }, g_config.authentication.delayMs));
     }
 
-    // Check if authentication token is valid.
-    // This method return true is token is valid.
-    // 'token' is the token to be tested.
-    isTokenValid(token)
-    {
-        return false
-    }
-
     // Disconnect from user manager.
     disconnect(options)
     {

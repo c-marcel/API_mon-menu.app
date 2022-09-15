@@ -20,11 +20,7 @@ var gDebugUserManagerData =
             id:             1,
             username:       "admin",
             passwordHash:   "PASSWORD_HASH",
-            level:          "admin",
-            authentication:
-            {
-                token:      "TOKEN"
-            }
+            level:          "admin"
         }
     ]
 }
@@ -57,7 +53,7 @@ class DebugUserManager extends Parent.AbstractUserManager
                     bcrypt.compare(password, entry.passwordHash, function(err, result)
                     {
                         if (result)
-                            resolve({code: 200, data: {level: entry.level, token: entry.authentication.token}})
+                            resolve({code: 200, data: {level: entry.level}})
                         
                         else
                             resolve({code: 401, data: null})
@@ -72,19 +68,6 @@ class DebugUserManager extends Parent.AbstractUserManager
         })
 
         return promise
-    }
-
-    isTokenValid(token)
-    {
-        for (let i = 0 ; i < gDebugUserManagerData.users.length ; i++)
-        {
-            let entry = gDebugUserManagerData.users.at(i)
-            if (entry.authentication.token == token)
-                return true
-        }
-
-        // Token not found.
-        return false
     }
 }
 

@@ -11,7 +11,6 @@ var Parent = require('./AbstractEntryPoint')
   * @apiDescription Delete a food entry into database.
   * @apiName deleteFood
   * @apiGroup Foods
-  * @apiHeader {String} auth-token Authentication token (private Api).
   * @apiVersion 1.0.0
   */
 class DeleteFood extends Parent.AbstractEntryPoint

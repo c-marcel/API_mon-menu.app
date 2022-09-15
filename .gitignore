@@ -106,3 +106,8 @@ dist
 # Config.
 src/config.js
 src/config_*
+
+# SQLite databases.
+*.sqlite
+*.sql
+*.sqlite3

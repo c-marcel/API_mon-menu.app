@@ -12,8 +12,7 @@ var Parent = require('./AbstractEntryPoint')
 /**
   * @api {get} /connect Connect user to private Api
   * @apiDescription Check if provided credentials are valid for user for using private
-  * part of the Api. This call will return user details (user level and authentication
-  * token if any).
+  * part of the Api. This call will return user details (user level).
   * @apiName connect
   * @apiGroup Users
   * @apiVersion 1.0.0
@@ -22,13 +21,11 @@ var Parent = require('./AbstractEntryPoint')
   * @apiQuery {String} password Password.
   *
   * @apiSuccess {String} level User level ('user' or 'admin').
-  * @apiSuccess {String} auth-token Authentication token for 'admin' level.
   * 
   * @apiSuccessExample {json} Success-Response:
   *     HTTP/1.1 200 OK
   *     {
-  *         "level": "admin",
-  *         "auth-token": "[TOKEN]"
+  *         "level": "admin"
   *     }
   */
 class Connect extends Parent.AbstractEntryPoint
@@ -47,6 +44,17 @@ class Connect extends Parent.AbstractEntryPoint
         let promise = this.userManager.getUserDataDelayed(username, password)
         promise.then(data => 
         {
+            // Save data to session.
+            if (data.code == 200)
+            {
+                req.session.data = data.data
+            }
+
+            else
+            {
+                req.session.destroy();
+            }
+
             res.status(data.code)
             res.send(data.data)
         })

@@ -12,7 +12,7 @@
 // * 'password': database server password
 // * 'database': database name
 
-var Client  = require('pg-native');
+var Client = require('pg-native');
 
 var Parent = require('./AbstractUserManager')
 var bcrypt = require("bcrypt")
@@ -53,7 +53,7 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
                 {
                     if (result)
                     {
-                        resolve({code: 200, data: {level: res[0].level, token: res[0].authToken}})
+                        resolve({code: 200, data: {level: res[0].level}})
                     }
                     
                     else
@@ -68,16 +68,6 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
         })
 
         return promise
-    }
-
-    isTokenValid(token)
-    {
-        let res = this.client.querySync("SELECT * FROM users WHERE \"authToken\" = $1", [token])
-
-        if (res.length != 1)
-            return false
-
-        return true
     }
 }
 

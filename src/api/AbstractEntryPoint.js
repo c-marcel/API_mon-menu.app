@@ -51,18 +51,33 @@ class AbstractEntryPoint
         this.userManager = userManager
     }
 
+    // Get user level based on session data.
+    getUserLevel(req)
+    {
+        if (!req.session)
+            return ""
+
+        if (!req.session.data)
+            return ""
+
+        if (!req.session.data.level)
+            return ""
+
+        return req.session.data.level
+    }
+
     exec(req, res)
     {
         // Check for authentification.
-        // Based on a constant token defined into Http headers ('auth-token').
+        // Based on session data: level must be 'admin'.
         if (this.authentificationNeeded)
         {
-            let authToken = String(req.headers["auth-token"])
-            if (!this.userManager.isTokenValid(authToken))
+            let userLevel = this.getUserLevel(req)
+            if (userLevel != "admin")
             {
                 res.status(401)
                 res.send(createErrorAnswer('Authentication error', 
-                                           'No auth-token HTTP header defined or bad token.'))
+                                           'Access denied.'))
                 return
             }
         }
