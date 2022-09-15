@@ -4,7 +4,19 @@
 
 "use strict";
 
-const config = require('../config')
+// Try to load config file.
+var config = null
+try
+{
+    config = require('../config')
+}
+catch
+{
+    console.error("Fatal error: cannot find 'config.js' file into 'src' directory.")
+    console.error("Please create 'src/config.js' file from provided templates.")
+
+    process.exit([1]);
+}
 
 // Load configuration.
 const g_config = new config.Config();
@@ -46,7 +58,7 @@ class AbstractUserManager
     // 'resolve' is the resolve function from the initial promise.
     getUserData(username, password, resolve)
     {
-        return new Promise((r, reject) => { resolve({code: 500, data: null}) })
+        return new Promise((r, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Get user data if credentials are valid. Apply a delay defined into 

@@ -36,7 +36,7 @@ class AbstractDataProvider
     // This method returns a Promise that will return data as JSON.
     getFoods()
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Get data for specific food identified by id field.
@@ -44,7 +44,7 @@ class AbstractDataProvider
     // This method returns a Promise that will return data as JSON.
     getFoodData(id)
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Create a new food entry.
@@ -52,7 +52,7 @@ class AbstractDataProvider
     // Returned data contains the new entry id.
     createFood()
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Delete a food entry.
@@ -60,7 +60,7 @@ class AbstractDataProvider
     // This method returns a Promise that will return HTTP response code.
     deleteFood(id)
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Update a food entry.
@@ -68,19 +68,19 @@ class AbstractDataProvider
     // This method returns a Promise that will return HTTP response code.
     updateFood(object)
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Dump data provider objects.
     dump()
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Restore data provider objects.
     restore(data)
     {
-        return new Promise((resolve, reject) => { resolve({code: 404, data: null}) })
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
     // Disconnect from data provider.
