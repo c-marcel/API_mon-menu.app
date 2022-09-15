@@ -69,6 +69,8 @@ g_app.use(session(
     saveUninitialized:  g_config.server.cookies.saveUninitialized
 }))
 
+g_app.disable('x-powered-by');
+
 // Catch invalid JSON body.
 g_app.use((err, req, res, next) =>
 {
