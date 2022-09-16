@@ -4,7 +4,7 @@
 
 "use strict";
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {put} /updateFood Update a food entry

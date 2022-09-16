@@ -56,7 +56,7 @@ class AbstractDataProvider
     }
 
     // Delete a food entry.
-    // 'id' parameter is an integer that uniquely identify a database entry.
+    // 'id' parameter is a string that uniquely identify a database entry.
     // This method returns a Promise that will return HTTP response code.
     deleteFood(id)
     {
@@ -85,6 +85,45 @@ class AbstractDataProvider
 
     // Initialize data provider (e.g. database tables).
     init()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Get recipe groups (fields: id, title).
+    // This method returns a Promise that will return data as JSON.
+    getRecipeGroups()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Get data for specific recipe group identified by id field.
+    // 'id' parameter is a string that uniquely identify a database entry.
+    // This method returns a Promise that will return data as JSON.
+    getRecipeGroupData(id)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Create a new recipe group.
+    // This method returns a Promise that will return data as JSON.
+    // Returned data contains the new entry id.
+    createRecipeGroup()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Delete a recipe group.
+    // 'id' parameter is a string that uniquely identify a database entry.
+    // This method returns a Promise that will return HTTP response code.
+    deleteRecipeGroup(id)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Update a recipe group.
+    // 'object' is the recipe group (with all fields).
+    // This method returns a Promise that will return HTTP response code.
+    updateRecipeGroup(object)
     {
         return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }

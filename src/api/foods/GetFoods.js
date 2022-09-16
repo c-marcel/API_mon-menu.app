@@ -7,7 +7,7 @@
 // The GetFoods object implements the '/getFoods' entry point that
 // returns all foods into database (fields: id, title, details).
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {get} /getFoods Get the list of the foods
@@ -18,7 +18,7 @@ var Parent = require('./AbstractEntryPoint')
   * @apiVersion 1.0.0
   *
   * @apiSuccess {Object[]} foods Array of foods.
-  * @apiSuccess {Number} foods.id Food identifier as number.
+  * @apiSuccess {String} foods.id Food identifier as guid.
   * @apiSuccess {String} foods.title Food title.
   * @apiSuccess {String} foods.details Food details.
   * 
@@ -28,7 +28,7 @@ var Parent = require('./AbstractEntryPoint')
   *       "foods":
   *       [
   *           {
-  *               "id": 1,
+  *               "id": "1",
   *               "title": "Noisettes",
   *               "details": "entières, décortiquées, bio, en vrac'"
   *           }

@@ -8,7 +8,7 @@
 // returns all data for a specific food entry. Food is identified with the
 // :id parameter that is compared with the id field into database objects.
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {get} /getFoodData/:id Get the data for a specific food
@@ -17,10 +17,10 @@ var Parent = require('./AbstractEntryPoint')
   * @apiGroup Foods
   * @apiVersion 1.0.0
   * 
-  * @apiParam {Number} id Food identifier as integer.
+  * @apiParam {String} id Food identifier as uuid.
   *
   * @apiSuccess {Object} food Object containing food data.
-  * @apiSuccess {Number} food.id Food identifier as number.
+  * @apiSuccess {String} food.id Food identifier as guid.
   * @apiSuccess {String} food.title Food title.
   * @apiSuccess {String} food.details Food subtitle.
   * @apiSuccess {Array} food.months Array containing months when food is available (1: January, ...).
@@ -58,7 +58,7 @@ var Parent = require('./AbstractEntryPoint')
   * @apiSuccessExample {json} Success-Response:
   *     HTTP/1.1 200 OK
   *     {
-  *         "id":                     1,
+  *         "id":                     "1",
   *         "title":                  'Noisettes',
   *         "details":                'entières, décortiquées, bio, en vrac',
   *         "months":                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],

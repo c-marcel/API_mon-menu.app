@@ -7,7 +7,7 @@
 // The Disconnect object implements the '/disconnect' entry point that
 // permits to user to disconnect from the private part of the Api.
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {get} /disconnect Disconnect user from private Api
@@ -15,6 +15,7 @@ var Parent = require('./AbstractEntryPoint')
   * @apiName disconnect
   * @apiGroup Users
   * @apiVersion 1.0.0
+  * @apiPrivate
   */
 class Disconnect extends Parent.AbstractEntryPoint
 {

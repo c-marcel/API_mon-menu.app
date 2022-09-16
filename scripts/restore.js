@@ -39,7 +39,7 @@ dataProvider.restore(data).then(d =>
 {
     if (d.code != 200)
     {
-        console.error("Cannot dump data from data provider.")
+        console.error("Cannot restore data from data provider.")
         process.exit()
     }
 

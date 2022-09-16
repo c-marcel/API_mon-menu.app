@@ -4,20 +4,22 @@
 
 "use strict";
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
-  * @api {delete} /deleteFood Delete a food entry
-  * @apiDescription Delete a food entry into database.
-  * @apiName deleteFood
-  * @apiGroup Foods
+  * @api {delete} /deleteRecipeGroup/:id Delete a recipe group
+  * @apiDescription Delete a recipe group into database.
+  * @apiName deleteRecipeGroup
+  * @apiGroup RecipeGroups
   * @apiVersion 1.0.0
+  * 
+  * @apiParam {String} id Group identifier as uuid.
   */
-class DeleteFood extends Parent.AbstractEntryPoint
+class DeleteRecipeGroup extends Parent.AbstractEntryPoint
 {
     constructor()
     {
-        super('deleteFood', true)
+        super('deleteRecipeGroup', true)
     }
 
     executeImplementation(req, res)
@@ -25,7 +27,7 @@ class DeleteFood extends Parent.AbstractEntryPoint
         // Get food id.
         let id = req.params.id
 
-        let promise = this.dataProvider.deleteFood(id)
+        let promise = this.dataProvider.deleteRecipeGroup(id)
         promise.then((data) =>
         {
             res.status(data.code)
@@ -34,4 +36,4 @@ class DeleteFood extends Parent.AbstractEntryPoint
     }
 }
 
-module.exports.DeleteFood = DeleteFood
+module.exports.DeleteRecipeGroup = DeleteRecipeGroup

@@ -4,34 +4,34 @@
 
 "use strict";
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
-  * @api {post} /createFood Create a new food entry
-  * @apiDescription Create a new empty food entry into database and return entry id.
-  * @apiName createFood
-  * @apiGroup Foods
+  * @api {post} /createRecipeGroup Create a new recipe group
+  * @apiDescription Create a new empty recipe group into database and return entry id.
+  * @apiName createRecipeGroup
+  * @apiGroup RecipeGroups
   * @apiVersion 1.0.0
   * @apiPrivate
   *
-  * @apiSuccess {Number} id Food identifier as number.
+  * @apiSuccess {String} id Recipe group identifier as guid.
   * 
   * @apiSuccessExample {json} Success-Response:
   *     HTTP/1.1 200 OK
   *     {
-  *         "id": 126
+  *         "id": "126"
   *     }
   */
-class CreateFood extends Parent.AbstractEntryPoint
+class CreateRecipeGroup extends Parent.AbstractEntryPoint
 {
     constructor()
     {
-        super('createFood', true)
+        super('createRecipeGroup', true)
     }
 
     executeImplementation(req, res)
     {
-        let promise = this.dataProvider.createFood()
+        let promise = this.dataProvider.createRecipeGroup()
         promise.then(data =>
         {
             res.status(data.code)
@@ -40,4 +40,4 @@ class CreateFood extends Parent.AbstractEntryPoint
     }
 }
 
-module.exports.CreateFood = CreateFood
+module.exports.CreateRecipeGroup = CreateRecipeGroup

@@ -7,7 +7,7 @@
 // The Connect object implements the '/connect' entry point that
 // permits to user to connect to the private part of the Api.
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {get} /connect Connect user to private Api

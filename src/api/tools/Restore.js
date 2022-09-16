@@ -4,7 +4,7 @@
 
 "use strict";
 
-var Parent = require('./AbstractEntryPoint')
+var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {post} /restore Restore all database entries

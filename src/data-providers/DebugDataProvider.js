@@ -7,6 +7,7 @@
 // This data provider ('debug') is a local and volatile database
 // for debug purpose only.
 // This provider requires no options.
+const { v4: uuidv4 } = require('uuid');
 
 var Parent = require('./AbstractDataProvider')
 
@@ -527,6 +528,19 @@ var gDebugDataProviderData =
                 }
             }
         }
+    ],
+
+    recipeGroups:
+    [
+        {
+            id:     1,
+            title:  "Recette 1"
+        },
+
+        {
+            id:     2,
+            title:  "Recette 2"
+        }
     ]
 }
 
@@ -666,7 +680,6 @@ class DebugDataProvider extends Parent.AbstractDataProvider
     constructor()
     {
         super("Local and volatile database storage. For debug only.");
-        this.nextAvailableId = 5
     }
 
     connect(options)
@@ -700,6 +713,16 @@ class DebugDataProvider extends Parent.AbstractDataProvider
         return promise
     }
 
+    getRecipeGroups()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            resolve({code: 200, data: gDebugDataProviderData.recipeGroups})
+        })
+
+        return promise
+    }
+
     getFoodData(id)
     {
         var promise = new Promise((resolve, reject) =>
@@ -721,16 +744,34 @@ class DebugDataProvider extends Parent.AbstractDataProvider
         return promise
     }
 
+    getRecipeGroupData(id)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            for (let i = 0 ; i < gDebugDataProviderData.recipeGroups.length ; i++)
+            {
+                let entry = gDebugDataProviderData.recipeGroups.at(i)
+                if (entry.id == id)
+                {
+                    resolve({code: 200, data: entry})
+                    return
+                }
+            }
+
+            // id not found.
+            resolve({code: 404, data: null})
+        })
+
+        return promise
+    }
+
     createFood()
     {
         var promise = new Promise((resolve, reject) =>
         {
             // Copy empty entry.
             let data = {...gEmptyEntry};
-
-            // Set next available id.
-            data.id = this.nextAvailableId
-            this.nextAvailableId++
+            data.id = uuidv4();
 
             // Add entry.
             gDebugDataProviderData.foods.push(data)
@@ -814,6 +855,69 @@ class DebugDataProvider extends Parent.AbstractDataProvider
         })
 
         return promise;
+    }
+
+    createRecipeGroup()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            let data = 
+            {
+                id:     uuidv4(),
+                title:  ""
+            }
+
+            // Add entry.
+            gDebugDataProviderData.recipeGroups.push(data)
+
+            resolve({code: 200, data: JSON.parse('{"id": ' + data.id + '}')})
+        })
+
+        return promise
+    }
+
+    deleteRecipeGroup(id)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            for (let i = 0 ; i < gDebugDataProviderData.recipeGroups.length ; i++)
+            {
+                let entry = gDebugDataProviderData.recipeGroups.at(i)
+                if (entry.id == id)
+                {
+                    gDebugDataProviderData.recipeGroups.splice(i, 1)
+                    resolve({code: 200, data: null})
+                    return
+                }
+            }
+
+            // id not found.
+            resolve({code: 404, data: null})
+        })
+
+        return promise
+    }
+
+    updateRecipeGroup(object)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            for (let i = 0 ; i < gDebugDataProviderData.recipeGroups.length ; i++)
+            {
+                let entry = gDebugDataProviderData.recipeGroups.at(i)
+                if (entry.id == object.id)
+                {
+                    gDebugDataProviderData.recipeGroups[i] = object
+                    resolve({code: 200, data: entry})
+                    return
+                }
+            }
+
+            // id not found.
+            resolve({code: 404, data: null})
+        })
+
+        return promise
     }
 }
 
