@@ -6,6 +6,7 @@
 
 // Load modules.
 const dpf    = require('../src/data-providers/DataProviderFactory')
+const umf    = require('../src/user-managers/UserManagerFactory')
 const config = require('../src/config')
 
 // Load configuration.
@@ -28,6 +29,23 @@ if (!dataProvider.connect(g_config.provider.options))
     process.exit()
 }
 
+// Create user manager.
+var userManager = umf.createUserManager(g_config.provider.type)
+if (!userManager)
+{
+    console.error('Unknown user manager type: \'' + g_config.provider.type + '\'. Quit.')
+    process.exit()
+}
+else
+    console.log('Using user manager: \'' + userManager.description() + '\'')
+
+// Connect to user manager.
+if (!userManager.connect(g_config.provider.options))
+{
+    console.error('Cannot open user manager connection. Quit.')
+    process.exit()
+}
+
 dataProvider.init().then(data =>
 {
     if (data.code != 200)
@@ -35,9 +53,15 @@ dataProvider.init().then(data =>
         console.error("Cannot initialize data provider. Error code: " + data.code)
         process.exit()
     }
+})
 
-    else
+userManager.init().then(data =>
+{
+    if (data.code != 200)
     {
-        console.log("Done.")
+        console.error("Cannot initialize user manager. Error code: " + data.code)
+        process.exit()
     }
 })
+    
+console.log("Done.")

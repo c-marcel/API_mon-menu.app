@@ -69,6 +69,17 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
 
         return promise
     }
+
+    init()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            this.client.querySync("CREATE TABLE IF NOT EXISTS users (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, username text, \"passwordHash\" text, level text, PRIMARY KEY(id));")
+            resolve({code: 200, data: null})
+        })
+
+        return promise;
+    }
 }
 
 module.exports.PostgreSQLUserManager = PostgreSQLUserManager

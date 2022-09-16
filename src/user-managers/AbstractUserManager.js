@@ -71,6 +71,12 @@ class AbstractUserManager
         return new Promise(resolve => setTimeout(() => { this.getUserData(username, password, resolve) }, g_config.authentication.delayMs));
     }
 
+    // Initialize user manager (e.g. database tables).
+    init()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
     // Disconnect from user manager.
     disconnect(options)
     {
