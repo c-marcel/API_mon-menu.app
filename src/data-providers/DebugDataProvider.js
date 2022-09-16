@@ -805,6 +805,16 @@ class DebugDataProvider extends Parent.AbstractDataProvider
 
         return promise;
     }
+
+    init()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            resolve({code: 200, data: null})
+        })
+
+        return promise;
+    }
 }
 
 module.exports.DebugDataProvider = DebugDataProvider

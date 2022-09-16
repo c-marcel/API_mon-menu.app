@@ -261,6 +261,22 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
         return promise;
     }
+
+    init()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            this.pool.query("CREATE TABLE IF NOT EXISTS foods (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));").then(function(res)
+            {
+                resolve({code: 200, data: null})
+            }).catch(e =>
+            {
+                console.error("Error while creating table. Error : " + e.code)
+            })
+        })
+
+        return promise;
+    }
 }
 
 module.exports.PostgreSQLDataProvider = PostgreSQLDataProvider

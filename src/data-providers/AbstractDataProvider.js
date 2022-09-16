@@ -7,7 +7,7 @@
 // Abstract object representing a data provider.
 // Data providers must inherit from this class and implement
 // the methods: connect(), getFoods(), getFoodData(), createFood(),
-// deleteFood(), updateFood(), disconnect().
+// deleteFood(), updateFood(), disconnect(), dump(), restore().
 class AbstractDataProvider
 {
     // The 'description' parameter is a string for describing each data provider.
@@ -79,6 +79,12 @@ class AbstractDataProvider
 
     // Restore data provider objects.
     restore(data)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Initialize data provider (e.g. database tables).
+    init()
     {
         return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }

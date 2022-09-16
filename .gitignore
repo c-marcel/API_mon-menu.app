@@ -111,3 +111,6 @@ src/config_*
 *.sqlite
 *.sql
 *.sqlite3
+
+# Dumps.
+*.sjson
