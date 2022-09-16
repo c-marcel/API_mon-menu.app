@@ -78,7 +78,11 @@ g_app.use((err, req, res, next) =>
     {
         res.status(err.status)
         res.send(JSON.parse('{"error": "Invalid JSON", "details": "Cannot parse body as JSON object"}'))
+        
+        return
     }
+
+    next();
 })
 
 // Install Api.

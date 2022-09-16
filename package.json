@@ -36,5 +36,8 @@
       "title": "mon-menu.app API",
       "url": "https://api.mon-menu.app"
     }
+  },
+  "devDependencies": {
+    "eslint": "^8.23.1"
   }
 }
