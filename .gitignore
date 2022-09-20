@@ -114,3 +114,7 @@ src/config_*
 
 # Dumps.
 *.sjson
+
+# Tls certificate and private key.
+*.key
+*.crt

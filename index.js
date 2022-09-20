@@ -11,6 +11,9 @@ const sqlite  = require('better-sqlite3')
 const session = require('express-session')
 const config  = require('./src/config')
 const express = require('express');
+const https   = require('https');
+const http    = require('http');
+const fs      = require('fs');
 
 // Load methods.
 const { installApi } = require('./src/api/Api');
@@ -66,7 +69,12 @@ g_app.use(session(
 {
     store:              sessionStore,
     secret:             g_config.server.cookies.secret,
-    saveUninitialized:  g_config.server.cookies.saveUninitialized
+    saveUninitialized:  g_config.server.cookies.saveUninitialized,
+    resave:             false,
+    cookie:
+    {
+        secure: true
+    }
 }))
 
 g_app.disable('x-powered-by');
@@ -88,10 +96,33 @@ g_app.use((err, req, res, next) =>
 // Install Api.
 installApi(g_app, dataProvider, userManager)
 
+var server = null
+
+// Install Tls connection.
+if (g_config.server.connection.secure)
+{
+    console.log('Install Tls connection.')
+
+    var privateKey  = fs.readFileSync(g_config.server.connection.privateKey, 'utf8');
+    var certificate = fs.readFileSync(g_config.server.connection.certificate, 'utf8');
+
+    var credentials =
+    {
+        key:    privateKey,
+        cert:   certificate
+    };
+
+    server = https.createServer(credentials, g_app);
+}
+
+// Use non Tls connection.
+else
+{
+    server = http.createServer(g_app);
+}
+
 // Start server.
-// Note: there is no need to use TLS because this server will communicate
-// locally with the Apache proxy.
-g_app.listen(g_config.server.port, () =>
+server.listen(g_config.server.port, () =>
 {
     console.log('Starting API on port: ' + g_config.server.port)
 })

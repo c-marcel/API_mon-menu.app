@@ -22,6 +22,14 @@ class Config
             {
                 secret:             ["secret1", "secret2"],
                 saveUninitialized:  false
+            },
+
+            // Connection options.
+            connection:
+            {
+                secure:         true,                   //< If set to 'true' use https. 'privateKey' and 'certificate' must be set.
+                privateKey:     "my-private.key",       //< Private key filename.
+                certificate:    "my-certificate.crt"    //< Certificate filename.
             }
         }
 
