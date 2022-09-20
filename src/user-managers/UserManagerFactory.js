@@ -6,19 +6,14 @@
 
 // This factory creates an user manager by providing its type.
 // Available types:
-// 'debug' - local and volatile manager (for debug purpose only).
 // 'postgresql' - PostgreSQL database connection.
 
 var PostgreSQLUserManager = require('./PostgreSQLUserManager')
-var DebugUserManager = require('./DebugUserManager')
 
 // Create a data provider by type.
 // Return null on error.
 function createUserManager(type)
 {
-    if (type === 'debug')
-        return new DebugUserManager.DebugUserManager();
-
     if (type === 'postgresql')
         return new PostgreSQLUserManager.PostgreSQLUserManager();
 

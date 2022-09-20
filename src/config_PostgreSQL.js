@@ -39,7 +39,7 @@ class Config
         // Api providers options.
         this.provider =
         {
-            // Provider type: 'debug' or 'postgresql'.
+            // Provider type: 'postgresql'.
             type:       'postgresql',
 
             // Provider option (object).

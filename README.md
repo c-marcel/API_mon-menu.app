@@ -7,12 +7,11 @@ Ce projet contient le code source de l'API servant de back-end pour le site [mon
 
 * Gestion des utilisateurs,
 * Gestion des aliments (en lecture seule pour la partie publique, et écriture pour la partie privée),
-* [à venir] Gestion des recettes.
+* [en cours] Gestion des recettes.
 
 Les données exposées au travers de l'API peuvent provenir :
 
-* D'une base de données PostgreSQL,
-* D'un connecteur local (données volatiles, pour débogage uniquement).
+* D'une base de données PostgreSQL.
 
 La documentation de l'API est disponible à la racine du répertoire d'installation, par exemple [api.mon-menu.app](https://api.mon-menu.app).
 
