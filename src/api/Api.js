@@ -26,6 +26,12 @@ var CreateRecipeGroup   = require('./recipegroups/CreateRecipeGroup')
 var DeleteRecipeGroup   = require('./recipegroups/DeleteRecipeGroup')
 var UpdateRecipeGroup   = require('./recipegroups/UpdateRecipeGroup')
 
+var GetRecipeData       = require('./recipes/GetRecipeData')
+var GetRecipeMetadata   = require('./recipes/GetRecipeMetadata')
+var CreateRecipe        = require('./recipes/CreateRecipe')
+var DeleteRecipe        = require('./recipes/DeleteRecipe')
+var UpdateRecipe        = require('./recipes/UpdateRecipe')
+
 // Install a specific entry point.
 // 'app' parameter is the express application.
 // 'dataProvider' parameter is the data provider object.
@@ -92,6 +98,12 @@ function installApi(app, dataProvider, userManager)
     installEntryPoint(app, dataProvider, userManager, '/createRecipeGroup',         'CreateRecipeGroup',    'post'  )
     installEntryPoint(app, dataProvider, userManager, '/deleteRecipeGroup/:id',     'DeleteRecipeGroup',    'delete')
     installEntryPoint(app, dataProvider, userManager, '/updateRecipeGroup',         'UpdateRecipeGroup',    'put'   )
+
+    installEntryPoint(app, dataProvider, userManager, '/getRecipeMetadata/:id',     'GetRecipeMetadata',    'get'   )
+    installEntryPoint(app, dataProvider, userManager, '/getRecipeData/:id',         'GetRecipeData',        'get'   )
+    installEntryPoint(app, dataProvider, userManager, '/createRecipe',              'CreateRecipe',         'post'  )
+    installEntryPoint(app, dataProvider, userManager, '/deleteRecipe/:id',          'DeleteRecipe',         'delete')
+    installEntryPoint(app, dataProvider, userManager, '/updateRecipe',              'UpdateRecipe',         'put'   )
 }
 
 module.exports = { installApi }

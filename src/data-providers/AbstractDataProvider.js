@@ -128,6 +128,46 @@ class AbstractDataProvider
         return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
 
+    // Create a new recipe.
+    // This method returns a Promise that will return data as JSON.
+    // Returned data contains the new entry id.
+    createRecipe()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Delete a recipe.
+    // 'id' parameter is a string that uniquely identify a database entry.
+    // This method returns a Promise that will return HTTP response code.
+    deleteRecipe(id)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Get data for specific recipe identified by id field.
+    // 'id' parameter is a string that uniquely identify a database entry.
+    // This method returns a Promise that will return data as JSON.
+    getRecipeData(id)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Get metadata for specific recipe identified by id field.
+    // 'id' parameter is a string that uniquely identify a database entry.
+    // This method returns a Promise that will return data as JSON.
+    getRecipeMetadata(id)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Update a recipe.
+    // 'object' is the recipe (with all fields).
+    // This method returns a Promise that will return HTTP response code.
+    updateRecipe(object)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
     // Disconnect from data provider.
     disconnect(options)
     {
