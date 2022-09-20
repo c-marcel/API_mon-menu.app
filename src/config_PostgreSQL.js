@@ -46,7 +46,8 @@ class Config
                 port:       5432,           //< Port used for PostgreSQL server.
                 user:       "username",     //< Username for connection.
                 password:   "password",     //< Password for connection.
-                database:   "db_name"       //< Database name.
+                database:   "db_name",      //< Database name.
+                prefix:     "prefix"        //< Table names prefix.
             }
         }
 

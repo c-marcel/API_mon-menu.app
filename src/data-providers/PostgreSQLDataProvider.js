@@ -18,12 +18,19 @@ const { v4: uuidv4 } = require('uuid');
 const { Pool } = require("pg");
 
 var Parent = require('./AbstractDataProvider')
+var config = require('../config')
 
 class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 {
     constructor()
     {
         super("PostegreSQL database data provider.");
+
+        // Store tables names.
+        const cfg = new config.Config();
+
+        this.tableName_foods        = cfg.provider.options.prefix + "_foods";
+        this.tableName_recipegroups = cfg.provider.options.prefix + "_recipegroups";
     }
 
     connect(options)
@@ -43,7 +50,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         {
             var data = {foods: []}
 
-            this.pool.query("SELECT id, title, details FROM foods").then(function(res)
+            this.pool.query("SELECT id, title, details FROM " + this.tableName_foods).then(function(res)
             {
                 for (let i = 0 ; i < res.rowCount ; i++)
                 {
@@ -67,7 +74,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         {
             var data = {recipeGroups: []}
 
-            this.pool.query("SELECT id, title FROM recipegroups").then(function(res)
+            this.pool.query("SELECT id, title FROM " + this.tableName_recipegroups).then(function(res)
             {
                 for (let i = 0 ; i < res.rowCount ; i++)
                 {
@@ -89,7 +96,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("SELECT * FROM foods WHERE id = $1", [id]).then(function(res)
+            this.pool.query("SELECT * FROM " + this.tableName_foods + " WHERE id = $1", [id]).then(function(res)
             {
                 if (res.rowCount == 0)
                 {
@@ -118,7 +125,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("SELECT * FROM recipegroups WHERE id = $1", [id]).then(function(res)
+            this.pool.query("SELECT * FROM " + this.tableName_recipegroups + " WHERE id = $1", [id]).then(function(res)
             {
                 if (res.rowCount == 0)
                 {
@@ -147,7 +154,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO foods (id, title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition) VALUES ('" + uuidv4() + "', '', '', ARRAY[]::integer[], 0, 0.0, '{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }', '{ \"energy\": { \"value\": 0.0, \"source\": \"\" }, \"proteins\": { \"value\": 0.0, \"source\": \"\" }, \"carbohydrates\": { \"value\": 0.0, \"source\": \"\" }, \"lipids\": { \"value\": 0.0, \"source\": \"\" }, \"sugars\": { \"value\": 0.0, \"source\": \"\" }, \"fibers\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_ala\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_epa\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_dha\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_la\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_ara\": { \"value\": 0.0, \"source\": \"\" }, \"omega9\": { \"value\": 0.0, \"source\": \"\" }, \"salt\": { \"value\": 0.0, \"source\": \"\" }, \"calcium\": { \"value\": 0.0, \"source\": \"\" }, \"copper\": { \"value\": 0.0, \"source\": \"\" }, \"iron\": { \"value\": 0.0, \"source\": \"\" }, \"iodine\": { \"value\": 0.0, \"source\": \"\" }, \"magnesium\": { \"value\": 0.0, \"source\": \"\" }, \"sodium\": { \"value\": 0.0, \"source\": \"\" }, \"zinc\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_c\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_d\": { \"value\": 0.0, \"source\": \"\" } }') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_foods + " (id, title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition) VALUES ('" + uuidv4() + "', '', '', ARRAY[]::integer[], 0, 0.0, '{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }', '{ \"energy\": { \"value\": 0.0, \"source\": \"\" }, \"proteins\": { \"value\": 0.0, \"source\": \"\" }, \"carbohydrates\": { \"value\": 0.0, \"source\": \"\" }, \"lipids\": { \"value\": 0.0, \"source\": \"\" }, \"sugars\": { \"value\": 0.0, \"source\": \"\" }, \"fibers\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_ala\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_epa\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_dha\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_la\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_ara\": { \"value\": 0.0, \"source\": \"\" }, \"omega9\": { \"value\": 0.0, \"source\": \"\" }, \"salt\": { \"value\": 0.0, \"source\": \"\" }, \"calcium\": { \"value\": 0.0, \"source\": \"\" }, \"copper\": { \"value\": 0.0, \"source\": \"\" }, \"iron\": { \"value\": 0.0, \"source\": \"\" }, \"iodine\": { \"value\": 0.0, \"source\": \"\" }, \"magnesium\": { \"value\": 0.0, \"source\": \"\" }, \"sodium\": { \"value\": 0.0, \"source\": \"\" }, \"zinc\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_c\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_d\": { \"value\": 0.0, \"source\": \"\" } }') RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -171,7 +178,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO recipegroups (id, title) VALUES ('" + uuidv4() + "', '') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_recipegroups + " (id, title) VALUES ('" + uuidv4() + "', '') RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -195,7 +202,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("DELETE FROM foods WHERE id = $1 RETURNING id", [id]).then(function(res)
+            this.pool.query("DELETE FROM " + this.tableName_foods + " WHERE id = $1 RETURNING id", [id]).then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -219,7 +226,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("DELETE FROM recipegroups WHERE id = $1 RETURNING id", [id]).then(function(res)
+            this.pool.query("DELETE FROM " + this.tableName_recipegroups + " WHERE id = $1 RETURNING id", [id]).then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -243,7 +250,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("UPDATE foods SET title = $1, \
+            this.pool.query("UPDATE " + this.tableName_foods + " SET title = $1, \
                                               details = $2, \
                                               months = $3, \
                                               \"supplyArea\" = $4, \
@@ -285,7 +292,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("UPDATE recipegroups SET title = $1 \
+            this.pool.query("UPDATE " + this.tableName_recipegroups + " SET title = $1 \
                                                  WHERE id = $2 RETURNING *", [object.title,
                                                                               object.id]).then(function(res)
             {
@@ -320,7 +327,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 recipeGroups:   []
             }
 
-            this.pool.query("SELECT * FROM foods").then(function(res)
+            this.pool.query("SELECT * FROM " + this.tableName_foods).then(function(res)
             {
                 for (let i = 0 ; i < res.rowCount ; i++)
                 {
@@ -328,7 +335,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                     data.foods.push(item)
                 }
 
-                lthis.pool.query("SELECT * FROM recipegroups").then(function(res)
+                lthis.pool.query("SELECT * FROM " + this.tableName_recipegroups).then(function(res)
                 {
                     for (let i = 0 ; i < res.rowCount ; i++)
                     {
@@ -360,16 +367,16 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             const queries = [];
 
             // Drop table 'foods'.
-            queries.push({ query: "DROP TABLE foods" })
+            queries.push({ query: "DROP TABLE " + this.tableName_foods })
 
             // Create table 'foods'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS foods (id text NOT NULL, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
 
             // Drop table 'recipegroups'.
-            queries.push({ query: "DROP TABLE recipegroups" })
+            queries.push({ query: "DROP TABLE " + this.tableName_recipegroups })
 
             // Create table 'recipegroups'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS recipegroups (id text NOT NULL, title text, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
 
             // Add 'foods' data.
             for (let i = 0 ; i < data.foods.length ; i++)
@@ -377,7 +384,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 let entry = data.foods[i];
                 let query = 
                 {
-                    query:  "INSERT INTO foods (id, title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition, units) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+                    query:  "INSERT INTO " + this.tableName_foods + " (id, title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition, units) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
                     values:
                     [
                         entry.id,
@@ -401,7 +408,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 let entry = data.recipeGroups[i];
                 let query = 
                 {
-                    query:  "INSERT INTO recipegroups (id, title) VALUES ($1, $2)",
+                    query:  "INSERT INTO " + this.tableName_recipegroups + " (id, title) VALUES ($1, $2)",
                     values:
                     [
                         entry.id,
@@ -444,10 +451,10 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             const queries = [];
 
             // Create table 'foods'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS foods (id text NOT NULL, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
 
             // Create table 'recipegroups'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS recipegroups (id text NOT NULL, title text, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
 
             // Merge queries.
             const sql = pgp.helpers.concat(queries);

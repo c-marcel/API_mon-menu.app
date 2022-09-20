@@ -13,15 +13,21 @@
 // * 'database': database name
 
 var Client = require('pg-native');
+var bcrypt = require("bcrypt")
 
 var Parent = require('./AbstractUserManager')
-var bcrypt = require("bcrypt")
+var config = require('../config')
 
 class PostgreSQLUserManager extends Parent.AbstractUserManager
 {
     constructor()
     {
         super("PostegreSQL database user manager.");
+
+        // Store tables names.
+        const cfg = new config.Config();
+
+        this.tableName_users = cfg.provider.options.prefix + "_users";
     }
 
     connect(options)
@@ -40,7 +46,7 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
     {
         var promise = new Promise((r, reject) =>
         {
-            let res = this.client.querySync("SELECT * FROM users WHERE username = $1", [username])
+            let res = this.client.querySync("SELECT * FROM " + this.tableName_users + " WHERE username = $1", [username])
 
             if (res.length == 0)
             {
@@ -74,7 +80,7 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.client.querySync("CREATE TABLE IF NOT EXISTS users (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, username text, \"passwordHash\" text, level text, PRIMARY KEY(id));")
+            this.client.querySync("CREATE TABLE IF NOT EXISTS " + this.tableName_users + " (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, username text, \"passwordHash\" text, level text, PRIMARY KEY(id));")
             resolve({code: 200, data: null})
         })
 
