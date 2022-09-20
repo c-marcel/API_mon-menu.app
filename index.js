@@ -73,7 +73,8 @@ g_app.use(session(
     resave:             false,
     cookie:
     {
-        secure: true
+        secure: true,
+        maxAge: 15 * 60 * 1000
     }
 }))
 
