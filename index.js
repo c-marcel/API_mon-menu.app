@@ -123,7 +123,7 @@ else
 }
 
 // Start server.
-server.listen(g_config.server.port, () =>
+server.listen(g_config.server.port, g_config.server.host, () =>
 {
-    console.log('Starting API on port: ' + g_config.server.port)
+    console.log('Starting API on: ' + g_config.server.host + ':' + g_config.server.port)
 })

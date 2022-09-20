@@ -17,6 +17,9 @@ class Config
             // Port on which Api will serve.
             port: 3000,
 
+            // Host (i.e. interface used).
+            host: "127.0.0.1",
+
             // Cookies options.
             cookies:
             {
