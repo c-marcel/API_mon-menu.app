@@ -32,6 +32,9 @@ var CreateRecipe        = require('./recipes/CreateRecipe')
 var DeleteRecipe        = require('./recipes/DeleteRecipe')
 var UpdateRecipe        = require('./recipes/UpdateRecipe')
 
+var GetVersion          = require('./configuration/getVersion')
+var GetConfiguration    = require('./configuration/getConfiguration')
+
 // Install a specific entry point.
 // 'app' parameter is the express application.
 // 'dataProvider' parameter is the data provider object.
@@ -104,6 +107,9 @@ function installApi(app, dataProvider, userManager)
     installEntryPoint(app, dataProvider, userManager, '/createRecipe',              'CreateRecipe',         'post'  )
     installEntryPoint(app, dataProvider, userManager, '/deleteRecipe/:id',          'DeleteRecipe',         'delete')
     installEntryPoint(app, dataProvider, userManager, '/updateRecipe',              'UpdateRecipe',         'put'   )
+
+    installEntryPoint(app, dataProvider, userManager, '/getVersion',                'GetVersion',           'get'   )
+    installEntryPoint(app, dataProvider, userManager, '/getConfiguration',          'GetConfiguration',     'get'   )
 }
 
 module.exports = { installApi }

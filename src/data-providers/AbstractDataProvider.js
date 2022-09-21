@@ -173,6 +173,18 @@ class AbstractDataProvider
     {
         // Do nothing by default.
     }
+
+    // Get current Api version.
+    getVersion()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
+
+    // Get current Api configuration.
+    getConfiguration()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
 }
 
 module.exports.AbstractDataProvider = AbstractDataProvider

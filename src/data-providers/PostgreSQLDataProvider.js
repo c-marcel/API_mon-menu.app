@@ -698,6 +698,64 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
         return promise
     }
+
+    getVersion()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            this.pool.query("SELECT version FROM " + this.tableName_configuration).then(function(res)
+            {
+                if (res.rowCount == 0)
+                {
+                    resolve({code: 404, data: null})
+                }
+
+                else if (res.rowCount == 1)
+                {
+                    resolve({code: 200, data: res.rows[0]})
+                }
+
+                else
+                {
+                    resolve({code: 500, data: null})
+                }
+            }).catch(e =>
+            {
+                resolve({code: 500, data: null})
+            })
+        })
+
+        return promise
+    }
+
+    getConfiguration()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            this.pool.query("SELECT * FROM " + this.tableName_configuration).then(function(res)
+            {
+                if (res.rowCount == 0)
+                {
+                    resolve({code: 404, data: null})
+                }
+
+                else if (res.rowCount == 1)
+                {
+                    resolve({code: 200, data: res.rows[0]})
+                }
+
+                else
+                {
+                    resolve({code: 500, data: null})
+                }
+            }).catch(e =>
+            {
+                resolve({code: 500, data: null})
+            })
+        })
+
+        return promise
+    }
 }
 
 module.exports.PostgreSQLDataProvider = PostgreSQLDataProvider
