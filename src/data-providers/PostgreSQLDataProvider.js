@@ -29,9 +29,17 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         // Store tables names.
         const cfg = new config.Config();
 
-        this.tableName_foods        = cfg.provider.options.prefix + "_foods";
-        this.tableName_recipegroups = cfg.provider.options.prefix + "_recipegroups";
-        this.tableName_recipes      = cfg.provider.options.prefix + "_recipes";
+        this.tableName_foods            = cfg.provider.options.prefix + "_foods";
+        this.tableName_recipegroups     = cfg.provider.options.prefix + "_recipegroups";
+        this.tableName_recipes          = cfg.provider.options.prefix + "_recipes";
+        this.tableName_configuration    = cfg.provider.options.prefix + "_configuration";
+
+        // PostgreSQL database version.
+        this.db_version = "1"
+
+        // Physical data.
+        this.co2_electricity    = 0.074
+        this.co2_gas            = 0.443
     }
 
     connect(options)
@@ -501,6 +509,16 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
             // Create table 'recipes'.
             queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+
+            // Create table 'configuration'.
+            var dataco2 =
+            {
+                co2eq_kwh_electricity:  this.co2_electricity,
+                co2eq_kwh_gas:          this.co2_gas
+            }
+
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_configuration + " (version text NOT NULL, data_co2 json, PRIMARY KEY(version));" })
+            queries.push({ query: "INSERT INTO " + this.tableName_configuration + " (version, data_co2) VALUES ('" + this.db_version + "', '" + JSON.stringify(dataco2) + "');"})
 
             // Merge queries.
             const sql = pgp.helpers.concat(queries);
