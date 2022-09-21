@@ -289,8 +289,6 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
     updateRecipeGroup(object)
     {
-        console.log(object)
-        
         var promise = new Promise((resolve, reject) =>
         {
             this.pool.query("UPDATE " + this.tableName_recipegroups + " SET title = $1 \
@@ -308,7 +306,6 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 }
             }).catch(e =>
             {
-                console.log(e)
                 resolve({code: 500, data: null})
             })
         })
@@ -397,7 +394,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "DROP TABLE " + this.tableName_recipes })
 
             // Create table 'recipes'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, picture text, recipe text, ingredients json, times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
 
             // Add 'foods' data.
             for (let i = 0 ; i < data.foods.length ; i++)
@@ -503,7 +500,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
 
             // Create table 'recipes'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, picture text, recipe text, ingredients json, times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
 
             // Merge queries.
             const sql = pgp.helpers.concat(queries);
@@ -526,11 +523,11 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ('" + uuidv4() + "', '', '', 0, 0, '{ \"meat\": false, \"fish\": false, \"dairy\": false, \"eggs\": false, \"oap\": false }', ARRAY[]::integer[], 0.0, 0.0, '', '', '[]', '{ \"preparation\": 0.0, \"cooking\": 0.0, \"rest\": 0.0 }', '{ \"energy\": {\"oven\": 0.0, \"hob\": 0.0}, \"water\": 0.0 }', 0.0, '{\"ingredientsCo2eq\": 0.0}', '{ \"water\": 0.0, \"recyclable\": { \"ingredients\": {}, \"biodegradable\": 0.0, \"plastics\": 0.0, \"bricks\": 0.0, \"papers\": 0.0, \"glasses\": 0.0, \"others\": 0.0 }, \"nonRecyclable\": 0.0 }') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ('" + uuidv4() + "', '', '', 0, 0, '{ \"meat\": false, \"fish\": false, \"dairy\": false, \"eggs\": false, \"oap\": false }', ARRAY[]::integer[], 0.0, 0.0, '', '', ARRAY[]::json[], '{ \"preparation\": 0.0, \"cooking\": 0.0, \"rest\": 0.0 }', '{ \"energy\": {\"oven\": 0.0, \"hob\": 0.0}, \"water\": 0.0 }', 0.0, '{\"ingredientsCo2eq\": 0.0}', '{ \"water\": 0.0, \"recyclable\": { \"ingredients\": {}, \"biodegradable\": 0.0, \"plastics\": 0.0, \"bricks\": 0.0, \"papers\": 0.0, \"glasses\": 0.0, \"others\": 0.0 }, \"nonRecyclable\": 0.0 }') RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
-                    resolve({code: 200, data: JSON.parse('{"id": ' + res.rows[0].id + '}')})
+                    resolve({code: 200, data: JSON.parse('{"id": "' + res.rows[0].id + '"}')})
                 }
 
                 else
@@ -624,13 +621,15 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 resolve({code: 500, data: null})
             })
         })
+
+        return promise
     }
 
     updateRecipe(object)
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("UPDATE " + this.tableName_foods + " SET \"group\" = $1, \
+            this.pool.query("UPDATE " + this.tableName_recipes + " SET \"group\" = $1, \
                                               details = $2, \
                                               type = $3, \
                                               temperature = $4, \
