@@ -15,6 +15,8 @@ var Parent = require('../AbstractEntryPoint')
   * @apiName getRecipeMetadata
   * @apiGroup Recipes
   * @apiVersion 1.0.0
+  * 
+  * @apiParam {String} id Recipe identifier as uuid.
   *
   * @apiSuccess {Object[]} recipes Array of recipes.
   * @apiSuccess {String} recipes.id Recipe identifier as guid.
