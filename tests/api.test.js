@@ -39,8 +39,6 @@ beforeAll(() =>
 {
     return new Promise((resolve, reject) =>
     {
-        resolve()
-
         exec('docker run --name "' + g_docker_name + '" -e POSTGRES_PASSWORD=' + g_password + ' -e POSTGRES_USER=' + g_user + ' -e POSTGRES_DB="' + g_database_name + '" -d -p ' + g_port + ':5432 postgres', (error, stdout, stderr) => 
         {
             if (error)
@@ -74,12 +72,12 @@ beforeAll(() =>
                                 else
                                 {
                                     // Wait for Api has started.
-                                    setTimeout(resolve, 4000)
+                                    setTimeout(resolve, 5000)
                                 }
                             })
                         }
                     })
-                }, 4000);
+                }, 5000);
             }
         });
     })
@@ -121,7 +119,6 @@ function promiseForHttpSuccess(verb, entryPoint, code, checkCallback = undefined
             reject()
         }).catch((response) =>
         {
-            console.log(response)
             reject()
         })
     })
@@ -219,7 +216,7 @@ describe('Database connection', () =>
         return promiseForDatabaseConnection(g_hostname, g_port, g_user, g_password, "bad-database", true)
     })
 
-    /*test('Add admin user', () =>
+    test('Add admin user', () =>
     {
         return new Promise((resolve, reject) =>
         {
@@ -242,7 +239,7 @@ describe('Database connection', () =>
             client = null
             resolve()
         })
-    })*/
+    })
 })
 
 // Test connection to database.
@@ -1054,8 +1051,6 @@ afterAll(() =>
 {
     return new Promise((resolve, reject) =>
     {
-        resolve()
-
         exec('docker stop "' + g_docker_name + '" && docker rm "' + g_docker_name + '"', (error, stdout, stderr) => 
         {
             if (error)
