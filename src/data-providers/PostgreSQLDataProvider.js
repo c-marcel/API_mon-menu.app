@@ -167,7 +167,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             {
                 if (res.rowCount == 1)
                 {
-                    resolve({code: 200, data: JSON.parse('{"id": ' + res.rows[0].id + '}')})
+                    resolve({code: 200, data: JSON.parse('{"id": "' + res.rows[0].id + '"}')})
                 }
 
                 else

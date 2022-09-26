@@ -56,9 +56,9 @@ if (!userManager.connect(g_config.provider.options))
 }
 
 // Create user sessions storage.
-const SqliteStore         = require("better-sqlite3-session-store")(session)
-const userSessionsDatabse = new sqlite("userSessions.sqlite3");
-const sessionStore        = new SqliteStore({ client: userSessionsDatabse })
+const SqliteStore          = require("better-sqlite3-session-store")(session)
+const userSessionsDatabase = new sqlite("userSessions.sqlite3");
+const sessionStore         = new SqliteStore({ client: userSessionsDatabase })
 
 // Create application.
 const g_app = express()
@@ -73,7 +73,7 @@ g_app.use(session(
     resave:             false,
     cookie:
     {
-        secure: true,
+        secure: g_config.server.connection.secure,
         maxAge: 15 * 60 * 1000
     }
 }))
