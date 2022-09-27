@@ -4,13 +4,16 @@
 
 "use strict";
 
-var axios  = require('axios')
-var exec   = require('child_process').exec
-var Client = require('pg-native');
-var config = require('../src/config')
-var bcrypt = require("bcrypt")
+var axios   = require('axios')
+var exec    = require('child_process').exec
+var Client  = require('pg-native');
+var config  = require('../src/config')
+var bcrypt  = require("bcrypt")
+var request = require('sync-request')
 
-jest.setTimeout(50000)
+// Time-outs.
+jest.setTimeout(50000)                      //< Jest global time-out.
+const g_db_connection_timeout_ms = 20000    //< Time-out for database connection (docker instance ready).
 
 const cfg = new config.Config();
 
@@ -48,8 +51,31 @@ beforeAll(() =>
 
             else
             {
-                // Wait for container has started.
-                setTimeout(() => 
+                // Try to open connection to database and wait until connection has been established.
+                let client    = new Client()
+                let connected = false
+                let maxTime   = Date.now() + g_db_connection_timeout_ms
+
+                while (!connected && Date.now() < maxTime)
+                {
+                    try
+                    {
+                        client.connectSync("postgresql://" + g_user + ":" + g_password + "@" + g_hostname + ":" + g_port + "/" + g_database_name)    
+                        connected = true
+                    } catch (error)
+                    {
+                        connected = false
+                    }
+                }
+
+                client = null
+
+                // Connection has failed after time-out has been reached.
+                if (!connected)
+                    reject()
+
+                // Connection to database has been done.
+                else
                 {
                     // Initialize database.
                     exec('npm run init', (error, stdout, stderr) => 
@@ -71,13 +97,18 @@ beforeAll(() =>
 
                                 else
                                 {
-                                    // Wait for Api has started.
-                                    setTimeout(resolve, 6000)
+                                    // Wait for Api is ready.
+                                    let res = request('GET', getBaseUrl());
+                                    if (res.statusCode == 200)
+                                        resolve()
+
+                                    else
+                                        reject()
                                 }
                             })
                         }
                     })
-                }, 10000);
+                }
             }
         });
     })

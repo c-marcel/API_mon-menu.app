@@ -29,6 +29,7 @@
     "pg-native": "^3.0.1",
     "pg-promise": "^10.12.0",
     "pg-sync": "^0.2.0",
+    "sync-request": "^6.1.0",
     "uuid": "^9.0.0"
   },
   "apidoc": {
