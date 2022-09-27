@@ -9,11 +9,11 @@ var exec    = require('child_process').exec
 var Client  = require('pg-native');
 var config  = require('../src/config')
 var bcrypt  = require("bcrypt")
-var request = require('sync-request')
 
 // Time-outs.
 jest.setTimeout(50000)                      //< Jest global time-out.
 const g_db_connection_timeout_ms = 20000    //< Time-out for database connection (docker instance ready).
+const g_api_timeout_ms           = 20000    //< Time-out for Api access (Api is ready).
 
 const cfg = new config.Config();
 
@@ -35,6 +35,32 @@ var g_cookie = ""
 function getBaseUrl()
 {
     return 'http' + (cfg.server.connection.secure ? 's' : '') + '://' + (cfg.server.host) + ':' + (cfg.server.port)
+}
+
+// Connection test with time-out.
+const testConnection = async (reject, resolve) =>
+{
+    let connected = false
+    let maxTime   = Date.now() + g_api_timeout_ms
+
+    while (!connected && Date.now() < maxTime)
+    {
+        try
+        {
+            let response = await axios.get(getBaseUrl(), { timeout: 100 })
+            if (response.status == 200)
+                connected = true
+        } catch (error)
+        {
+            connected = false
+        }
+    }
+
+    if (connected)
+        resolve()
+
+    else
+        reject()
 }
 
 // Start database server.
@@ -97,13 +123,7 @@ beforeAll(() =>
 
                                 else
                                 {
-                                    // Wait for Api is ready.
-                                    let res = request('GET', getBaseUrl());
-                                    if (res.statusCode == 200)
-                                        resolve()
-
-                                    else
-                                        reject()
+                                    testConnection(reject, resolve)
                                 }
                             })
                         }
