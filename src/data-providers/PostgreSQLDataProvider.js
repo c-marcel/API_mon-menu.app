@@ -756,6 +756,331 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
         return promise
     }
+
+    // Determine the type of ingredients list. Returns:
+    // 0 - on error (bad format, or at least one ingredient has bad format)
+    // 1 - if ingredients are only foods
+    // 2 - if ingredients are both foods and recipes
+    ingredientListType(id, ingredients)
+    {
+        if (!Array.isArray(ingredients))
+            return 0
+
+        let type = 1
+
+        for(let i = 0 ; i < ingredients.length ; i++)
+        {
+            let ingredient = ingredients[i]
+            
+            // Ingredient list includes one recipe.
+            if (!ingredient.hasOwnProperty('food') && ingredient.hasOwnProperty('recipe'))
+            {
+                // Check for recipe id doesn't refer to current recipe (autoreference).
+                if (ingredient.recipe == id)
+                    return 0
+
+                type = 2
+            }
+
+            // Ingredient bad format: 'food' nor 'recipe' is defined.
+            if (!ingredient.hasOwnProperty('food') && !ingredient.hasOwnProperty('recipe'))
+                return 0
+        }
+
+        return type
+    }
+
+    // Compute recipe fields and return updated recipe.
+    // Use only foods for computation.
+    computeRecipeFieldsWithFoods(recipe, foods)
+    {
+        let out = recipe
+
+        // Reset fields.
+        out.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        out.ingredientsCost = 0.0
+        out.environmentalImpact.ingredientsCo2eq = 0.0
+
+        // Add ingredients values.
+        for(let i = 0 ; i < recipe.ingredients.length ; i++)
+        {
+            let ingredient = recipe.ingredients[i]
+
+            if (ingredient.hasOwnProperty('food'))
+            {
+                let id = ingredient.food
+
+                // Get food.
+                let food = foods[id]
+                
+                if (food)
+                {
+                    out.months = out.months.filter(value => food.months.includes(value))
+                    out.ingredientsCost += food.cost * ingredient.quantity
+                    out.environmentalImpact.ingredientsCo2eq += food.environmentalImpact.co2eq.kgco2e_kg * ingredient.quantity
+                }
+            }
+        }
+
+        return out
+    }
+
+    // Compute recipe fields and return updated recipe.
+    computeRecipeWithFoodsAndRecipes(recipe, foods, computedRecipesWithFoods, recipesWithFoodsAndRecipes)
+    {
+        let out = this.computeRecipeFieldsWithFoods(recipe, foods)
+
+        // Add ingredients values.
+        for(let i = 0 ; i < recipe.ingredients.length ; i++)
+        {
+            let ingredient = recipe.ingredients[i]
+
+            if (ingredient.hasOwnProperty('recipe'))
+            {
+                let id = ingredient.recipe
+
+                // Get recipe.
+                let recipe = computedRecipesWithFoods[id]
+                if (!recipe)
+                    recipe = recipesWithFoodsAndRecipes[id]
+
+                if (recipe)
+                {
+                    out.months = out.months.filter(value => recipe.months.includes(value))
+                    out.ingredientsCost += recipe.ingredientsCost
+                    out.environmentalImpact.ingredientsCo2eq += recipe.environmentalImpact.ingredientsCo2eq
+                }
+            }
+        }
+
+        return out
+    }
+
+    // Save computed fields value to check for convergence.
+    saveCurrentFieldsValue(recipesWithFoodsAndRecipes)
+    {
+        let out = {}
+
+        for (let id in recipesWithFoodsAndRecipes)
+        {
+            let recipe = recipesWithFoodsAndRecipes[id]
+            
+            let values =
+            {
+                months: recipe.months,
+                ingredientsCost: recipe.ingredientsCost,
+                ingredientsCo2eq : recipe.environmentalImpact.ingredientsCo2eq
+            }
+
+            out[id] = values
+        }
+
+        return out
+    }
+
+    // Convert months array to number using bitwise masks.
+    monthsArrayToNumber(months)
+    {
+        let out = 0
+        let add = 1
+
+        for (let i = 1 ; i <= 12 ; i++)
+        {
+            if (months.includes(i))
+                out += add
+
+            add *= 2
+        }
+
+        return out
+    }
+
+    computeRecipeLinkedFields()
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            let lthis = this
+
+            // Get foods.
+            this.pool.query("SELECT id, months, cost, \"environmentalImpact\" FROM " + this.tableName_foods).then(function(res)
+            {
+                let foods = {}
+                let beginDateTimeMs = Date.now()
+
+                for (let i = 0 ; i < res.rowCount ; i++)
+                {
+                    var item = res.rows[i]
+                    foods[item.id] = item
+                }
+
+                // Get recipes.
+                lthis.pool.query("SELECT id, months, ingredients, \"ingredientsCost\", \"environmentalImpact\" FROM " + lthis.tableName_recipes).then(function(res)
+                {
+                    let recipes = {}
+
+                    for (let i = 0 ; i < res.rowCount ; i++)
+                    {
+                        var item = res.rows[i]
+                        recipes[item.id] = item
+                    }
+
+                    // Copy recipes for updated recipes count.
+                    let initialRecipes = JSON.parse(JSON.stringify(recipes));
+
+                    // Split recipes: recipes with foods only and recipes with foods/recipes.
+                    let recipesWithFoods           = {}
+                    let recipesWithFoodsAndRecipes = {}
+
+                    for (let id in recipes)
+                    {
+                        let ingredients = recipes[id].ingredients
+                        let type        = lthis.ingredientListType(id, ingredients)
+
+                        // Ignore bad recipes (these recipes are not computed).
+                        if (type == 1)
+                            recipesWithFoods[id] = recipes[id]
+
+                        else if (type == 2)
+                            recipesWithFoodsAndRecipes[id] = recipes[id]
+                    }
+
+                    // Compute fields for recipes with only foods.
+                    let computedRecipesWithFoods = {}
+
+                    for (let id in recipesWithFoods)
+                    {
+                        let recipe = recipesWithFoods[id]
+                        let computedRecipe = lthis.computeRecipeFieldsWithFoods(recipe, foods)
+
+                        computedRecipesWithFoods[recipe.id] = computedRecipe
+                    }
+
+                    // Save current fields values.
+                    let currentFieldsValue = lthis.saveCurrentFieldsValue(recipesWithFoodsAndRecipes)
+
+                    // Compute new values until convergence.
+                    for(;;)
+                    {
+                        let converged = true
+
+                        for (let id in recipesWithFoodsAndRecipes)
+                        {
+                            // Compute new values for all recipes.
+                            let recipe = recipesWithFoodsAndRecipes[id]
+                            let computedRecipe = lthis.computeRecipeWithFoodsAndRecipes(recipe, foods, computedRecipesWithFoods, recipesWithFoodsAndRecipes)
+
+                            recipesWithFoodsAndRecipes[id] = computedRecipe
+
+                            // Compare values with stored data.
+                            let storedData = currentFieldsValue[id]
+
+                            if (Math.abs(storedData.ingredientsCost - computedRecipe.ingredientsCost) > 0.001)
+                                converged = false
+
+                            if (Math.abs(storedData.ingredientsCo2eq - computedRecipe.environmentalImpact.ingredientsCo2eq) > 0.001)
+                                converged = false
+
+                            let initialMonthsNumber  = lthis.monthsArrayToNumber(storedData.months)
+                            let computedMonthsNumber = lthis.monthsArrayToNumber(computedRecipe.months)
+
+                            if (initialMonthsNumber != computedMonthsNumber)
+                                converged = false
+
+                            // Update stored data.
+                            storedData.ingredientsCost = computedRecipe.ingredientsCost
+                            storedData.ingredientsCo2eq = computedRecipe.environmentalImpact.ingredientsCo2eq
+                            storedData.months = computedRecipe.months
+
+                            currentFieldsValue[id] = storedData
+                        }
+
+                        if (converged)
+                            break
+                    }
+
+                    // Count updated recipes and prepare queries.
+                    let updatedRecipes = []
+                    const queries = [];
+
+                    for (let id in initialRecipes)
+                    {
+                        // Get initial values.
+                        let i_ingredientsCost  = initialRecipes[id].ingredientsCost
+                        let i_ingredientsCo2eq = initialRecipes[id].environmentalImpact.ingredientsCo2eq
+                        let i_monthsNumber     = lthis.monthsArrayToNumber(initialRecipes[id].months)
+
+                        // Get final values.
+                        let recipe = computedRecipesWithFoods[id]
+                        if (!recipe)
+                            recipe = recipesWithFoodsAndRecipes[id]
+
+                        if (!recipe)
+                            continue
+
+                        let f_ingredientsCost  = recipe.ingredientsCost
+                        let f_ingredientsCo2eq = recipe.environmentalImpact.ingredientsCo2eq
+                        let f_monthsNumber     = lthis.monthsArrayToNumber(recipe.months)
+
+                        let updated = false
+
+                        if (Math.abs(i_ingredientsCost - f_ingredientsCost) > 0.001)
+                            updated = true
+
+                        if (Math.abs(i_ingredientsCo2eq - f_ingredientsCo2eq) > 0.001)
+                            updated = true
+
+                        if (i_monthsNumber != f_monthsNumber)
+                            updated = true
+
+                        if (updated)
+                        {
+                            updatedRecipes.push(id)
+
+                            queries.push(
+                            {
+                                query: "UPDATE " + lthis.tableName_recipes + " SET months = $1, \"ingredientsCost\" = $2, \"environmentalImpact\" = $3 WHERE id = $4;",
+                                values:
+                                [
+                                    recipe.months,
+                                    recipe.ingredientsCost,
+                                    recipe.environmentalImpact,
+                                    recipe.id
+                                ]
+                            })
+                        }
+                    }
+
+                    // Define output data.
+                    let executionTimeMs = Date.now() - beginDateTimeMs
+
+                    // Save recipes.
+                    const sql = pgp.helpers.concat(queries);
+
+                    lthis.pool.query(sql).then(function(res)
+                    {
+                        resolve({code: 200, data:
+                        {
+                            foodNumber:         Object.keys(foods).length,
+                            recipeNumber:       Object.keys(recipes).length,
+                            timeOfProcessing:   executionTimeMs,
+                            updatedRecipes:     updatedRecipes
+                        }})
+                    }).catch(e =>
+                    {
+                        resolve({code: 500, data: null})
+                    })
+                }).catch(e =>
+                {
+                    resolve({code: 500, data: null})
+                })
+            }).catch(e =>
+            {
+                resolve({code: 500, data: null})
+            })
+        })
+
+        return promise
+    }
 }
 
 module.exports.PostgreSQLDataProvider = PostgreSQLDataProvider

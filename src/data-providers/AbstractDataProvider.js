@@ -185,6 +185,13 @@ class AbstractDataProvider
     {
         return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
+
+    // Update linked fields for recipes.
+    // This method returns a Promise that will return HTTP response code and data.
+    computeRecipeLinkedFields()
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
 }
 
 module.exports.AbstractDataProvider = AbstractDataProvider
