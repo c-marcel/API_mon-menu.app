@@ -840,15 +840,15 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 let id = ingredient.recipe
 
                 // Get recipe.
-                let recipe = computedRecipesWithFoods[id]
-                if (!recipe)
-                    recipe = recipesWithFoodsAndRecipes[id]
+                let lrecipe = computedRecipesWithFoods[id]
+                if (!lrecipe)
+                    lrecipe = recipesWithFoodsAndRecipes[id]
 
-                if (recipe)
+                if (lrecipe)
                 {
-                    out.months = out.months.filter(value => recipe.months.includes(value))
-                    out.ingredientsCost += recipe.ingredientsCost
-                    out.environmentalImpact.ingredientsCo2eq += recipe.environmentalImpact.ingredientsCo2eq
+                    out.months = out.months.filter(value => lrecipe.months.includes(value))
+                    out.ingredientsCost += lrecipe.ingredientsCost * ingredient.quantity
+                    out.environmentalImpact.ingredientsCo2eq += lrecipe.environmentalImpact.ingredientsCo2eq * ingredient.quantity
                 }
             }
         }

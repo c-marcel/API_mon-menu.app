@@ -1380,7 +1380,7 @@ describe('Create, delete, update recipes (connected user)', () =>
         })
     })
 
-    test('Get new recipe metadata', () =>
+    test('Get new recipe data', () =>
     {
         return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe_id, 200, (resolve, reject, data) =>
         {
@@ -1821,6 +1821,7 @@ describe('Create, delete, update recipes (connected user)', () =>
     })
 })
 
+// SQL injections.
 describe('Test SQL injections', () =>
 {
     test('User connection SQL injection (1)', () =>
@@ -1971,6 +1972,394 @@ describe('Test SQL injections', () =>
         return promiseForHttpError('PUT', 'updateRecipe', 404, d)
     })
 
+    test('Disconnect user', () =>
+    {
+        return promiseForHttpSuccess('GET', 'disconnect', 200)
+    })
+})
+
+// Computed fields.
+var g_food1_id   = "";
+var g_food2_id   = "";
+var g_food3_id   = "";
+var g_recipe1_id = "";
+var g_recipe2_id = "";
+var g_recipe3_id = "";
+var g_food1      = "";
+var g_food2      = "";
+var g_food3      = "";
+var g_recipe1    = "";
+var g_recipe2    = "";
+var g_recipe3    = "";
+
+describe('Computed fields for recipes (connected user)', () =>
+{
+    test('Connection with valid login and password', () =>
+    {
+        return promiseForHttpSuccess('GET', 'connect?username=' + g_valid_username + '&password=' + g_valid_password, 200)
+    })
+
+    test('Create new food (1)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createFood', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_food1_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Create new food (2)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createFood', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_food2_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Create new food (3)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createFood', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_food3_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Get new food data (1)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getFoodData/' + g_food1_id, 200, (resolve, reject, data) =>
+        {
+            g_food1 = data
+            resolve()
+        })
+    })
+
+    test('Get new food data (2)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getFoodData/' + g_food2_id, 200, (resolve, reject, data) =>
+        {
+            g_food2 = data
+            resolve()
+        })
+    })
+
+    test('Get new food data (3)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getFoodData/' + g_food3_id, 200, (resolve, reject, data) =>
+        {
+            g_food3 = data
+            resolve()
+        })
+    })
+
+    test('Update new food data (1)', () =>
+    {
+        let d = g_food1
+
+        d.months = [1, 2, 3, 4, 5, 6]
+        d.cost = 5.5
+        d.environmentalImpact.co2eq.kgco2e_kg = 0.1
+
+        return promiseForHttpSuccess('PUT', 'updateFood', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Update new food data (2)', () =>
+    {
+        let d = g_food2
+
+        d.months = [2, 3, 4, 5, 6, 7, 8, 9]
+        d.cost = 7.2
+        d.environmentalImpact.co2eq.kgco2e_kg = 1.2
+
+        return promiseForHttpSuccess('PUT', 'updateFood', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Update new food data (3)', () =>
+    {
+        let d = g_food3
+
+        d.months = [7, 8, 9, 10, 11, 12]
+        d.cost = 10.1
+        d.environmentalImpact.co2eq.kgco2e_kg = 18.5
+
+        return promiseForHttpSuccess('PUT', 'updateFood', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Create new recipe (1)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createRecipe', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_recipe1_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Create new recipe (2)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createRecipe', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_recipe2_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Create new recipe (3)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createRecipe', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_recipe3_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Get new recipe data (1)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe1_id, 200, (resolve, reject, data) =>
+        {
+            g_recipe1 = data
+            resolve()
+        })
+    })
+
+    test('Get new recipe data (2)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe2_id, 200, (resolve, reject, data) =>
+        {
+            g_recipe2 = data
+            resolve()
+        })
+    })
+
+    test('Get new recipe data (3)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe3_id, 200, (resolve, reject, data) =>
+        {
+            g_recipe3 = data
+            resolve()
+        })
+    })
+
+    test('Update new recipe data (1)', () =>
+    {
+        let d = g_recipe1
+
+        d.ingredients =
+        [
+            {
+                food:       g_food1_id,
+                quantity:   0.5
+            },
+            {
+                food:       g_food2_id,
+                quantity:   2.0
+            }
+        ]
+
+        return promiseForHttpSuccess('PUT', 'updateRecipe', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Update new recipe data (2)', () =>
+    {
+        let d = g_recipe2
+
+        d.ingredients =
+        [
+            {
+                recipe:     g_recipe1_id,
+                quantity:   1.2
+            },
+            {
+                food:       g_food1_id,
+                quantity:   2.3
+            }
+        ]
+
+        return promiseForHttpSuccess('PUT', 'updateRecipe', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Update new recipe data (3)', () =>
+    {
+        let d = g_recipe3
+
+        d.ingredients =
+        [
+            {
+                food:       g_food1_id,
+                quantity:   0.4
+            },
+            {
+                food:       g_food2_id,
+                quantity:   0.7
+            },
+            {
+                food:       g_food3_id,
+                quantity:   0.8
+            },
+            {
+                recipe:     g_recipe2_id,
+                quantity:   0.6
+            }
+        ]
+
+        return promiseForHttpSuccess('PUT', 'updateRecipe', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Compute fields', () =>
+    {
+        return promiseForHttpSuccess('POST', 'computeRecipeLinkedFields', 200, (resolve, reject, data) =>
+        {
+            if (data.foodNumber != 3)
+                reject()
+
+            if (data.recipeNumber != 3)
+                reject()
+
+            if (data.updatedRecipes.length != 3)
+                reject()
+
+            if (!data.updatedRecipes.includes(g_recipe1_id))
+                reject()
+
+            if (!data.updatedRecipes.includes(g_recipe2_id))
+                reject()
+
+            if (!data.updatedRecipes.includes(g_recipe3_id))
+                reject()
+                
+            resolve()
+        })
+    })
+
+    test('Check recipe computed fields (1)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe1_id, 200, (resolve, reject, data) =>
+        {
+            if (data.months.length != 5)
+                reject()
+
+            if (!data.months.includes(2))
+                reject()
+
+            if (!data.months.includes(3))
+                reject()
+
+            if (!data.months.includes(4))
+                reject()
+
+            if (!data.months.includes(5))
+                reject()
+
+            if (!data.months.includes(6))
+                reject()
+
+            if (Math.abs(data.ingredientsCost - 17.15) > 0.001)
+                reject()
+
+            if (Math.abs(data.environmentalImpact.ingredientsCo2eq - 2.45) > 0.001)
+                reject()
+
+            resolve()
+        })
+    })
+
+    test('Check recipe computed fields (2)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe2_id, 200, (resolve, reject, data) =>
+        {
+            if (data.months.length != 5)
+                reject()
+
+            if (!data.months.includes(2))
+                reject()
+
+            if (!data.months.includes(3))
+                reject()
+
+            if (!data.months.includes(4))
+                reject()
+
+            if (!data.months.includes(5))
+                reject()
+
+            if (!data.months.includes(6))
+                reject()
+
+            if (Math.abs(data.ingredientsCost - 33.23) > 0.001)
+                reject()
+
+            if (Math.abs(data.environmentalImpact.ingredientsCo2eq - 3.17) > 0.001)
+                reject()
+
+            resolve()
+        })
+    })
+
+    test('Check recipe computed fields (3)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe3_id, 200, (resolve, reject, data) =>
+        {
+            if (data.months.length != 0)
+                reject()
+
+            if (Math.abs(data.ingredientsCost - 35.258) > 0.001)
+                reject()
+
+            if (Math.abs(data.environmentalImpact.ingredientsCo2eq - 17.582) > 0.001)
+                reject()
+
+            resolve()
+        })
+    })
+    
     test('Disconnect user', () =>
     {
         return promiseForHttpSuccess('GET', 'disconnect', 200)
