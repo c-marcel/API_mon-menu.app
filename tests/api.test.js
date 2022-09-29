@@ -68,69 +68,34 @@ beforeAll(() =>
 {
     return new Promise((resolve, reject) =>
     {
-        exec('docker run --name "' + g_docker_name + '" -e POSTGRES_PASSWORD=' + g_password + ' -e POSTGRES_USER=' + g_user + ' -e POSTGRES_DB="' + g_database_name + '" -d -p ' + g_port + ':5432 postgres', (error, stdout, stderr) => 
+        // Try to open connection to database and wait until connection has been established.
+        let client    = new Client()
+        let connected = false
+        let maxTime   = Date.now() + g_db_connection_timeout_ms
+
+        while (!connected && Date.now() < maxTime)
         {
-            if (error)
+            try
             {
-                reject()
-            }
-
-            else
+                client.connectSync("postgresql://" + g_user + ":" + g_password + "@" + g_hostname + ":" + g_port + "/" + g_database_name)    
+                connected = true
+            } catch (error)
             {
-                // Try to open connection to database and wait until connection has been established.
-                let client    = new Client()
-                let connected = false
-                let maxTime   = Date.now() + g_db_connection_timeout_ms
-
-                while (!connected && Date.now() < maxTime)
-                {
-                    try
-                    {
-                        client.connectSync("postgresql://" + g_user + ":" + g_password + "@" + g_hostname + ":" + g_port + "/" + g_database_name)    
-                        connected = true
-                    } catch (error)
-                    {
-                        connected = false
-                    }
-                }
-
-                client = null
-
-                // Connection has failed after time-out has been reached.
-                if (!connected)
-                    reject()
-
-                // Connection to database has been done.
-                else
-                {
-                    // Initialize database.
-                    exec('npm run init', (error, stdout, stderr) => 
-                    {
-                        if (error)
-                        {
-                            reject()
-                        }
-
-                        else
-                        {
-                            // Start Api.
-                            exec('pm2 start node -- ./index.js', (error, stdout, stderr) => 
-                            {
-                                if (error)
-                                {
-                                    reject()
-                                }
-
-                                else
-                                {
-                                    testConnection(reject, resolve)
-                                }
-                            })
-                        }
-                    })
-                }
+                connected = false
             }
-        });
+        }
+
+        client = null
+
+        // Connection has failed after time-out has been reached.
+        if (!connected)
+            reject()
+
+        // Connection to database has been done.
+        else
+        {
+            testConnection(reject, resolve)
+        }
     })
 });
 
@@ -2365,33 +2330,3 @@ describe('Computed fields for recipes (connected user)', () =>
         return promiseForHttpSuccess('GET', 'disconnect', 200)
     })
 })
-
-afterAll(() =>
-{
-    return new Promise((resolve, reject) =>
-    {
-        exec('docker stop "' + g_docker_name + '" && docker rm "' + g_docker_name + '"', (error, stdout, stderr) => 
-        {
-            if (error)
-            {
-                reject()
-            }
-
-            else
-            {
-                exec('pm2 del node', (error, stdout, stderr) => 
-                {
-                    if (error)
-                    {
-                        reject()
-                    }
-
-                    else
-                    {
-                        resolve()
-                    }
-                });
-            }
-        });
-    })
-});
