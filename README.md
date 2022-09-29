@@ -7,7 +7,7 @@ Ce projet contient le code source de l'API servant de back-end pour le site [mon
 
 * Gestion des utilisateurs,
 * Gestion des aliments (en lecture seule pour la partie publique, et écriture pour la partie privée),
-* [en cours] Gestion des recettes.
+* Gestion des recettes.
 
 Les données exposées au travers de l'API peuvent provenir :
 
