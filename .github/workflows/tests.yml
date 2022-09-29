@@ -18,5 +18,8 @@ jobs:
       - name: Install modules
         run: npm install
 
+      - name: Start Docker
+        run: docker run --name tests postgres
+        
       - name: Run tests
         run: npm test
