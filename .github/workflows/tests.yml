@@ -15,14 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Start PostgreSQL database docker
+        run: docker run --name "mon-menu.app" -e POSTGRES_PASSWORD=mmapwd -e POSTGRES_USER=mmau -e POSTGRES_DB="mon-menu.app" -d -p 15432:5432 postgres
+
       - name: Install modules
         run: npm install
 
-      - name: Start PostgreSQL database docker
-        run: docker run --name "mon-menu.app" -e POSTGRES_PASSWORD=mmapwd -e POSTGRES_USER=mmau -e POSTGRES_DB="mon-menu.app" -d -p 15432:5432 postgres
-        
       - name: Install pm2 tool
         run: npm install -g pm2
+
+      - name: Setup database tables
+        run: npm run init
 
       - name: Start Api
         run: pm2 start node -- ./index.js
