@@ -1,3 +1,5 @@
+![Tests](https://github.com/c-marcel/API_mon-menu.app/actions/workflows/tests.yml/badge.svg)
+
 # API mon-menu.app
 
 **Langage :** Node.js  
