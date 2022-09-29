@@ -1,4 +1,4 @@
-name: unit tests for api.mon-menu.app
+name: Tests
 
 on:
   push:
