@@ -10,13 +10,13 @@
 var Parent = require('../AbstractEntryPoint')
 
 /**
-  * @api {get} /getRecipes/:group Get recipe id for provided group
-  * @apiDescription Get recipe id for provided group.
+  * @api {get} /getRecipes Get recipe ids for provided group
+  * @apiDescription Get recipe ids for provided group.
   * @apiName getRecipes
   * @apiGroup Recipes
   * @apiVersion 1.0.0
   * 
-  * @apiParam {String} group Recipe group identifier as uuid.
+  * @apiQuery {String} group Recipe group identifier as uuid.
   *
   * @apiSuccess {String[]} recipes Array of recipe ids.
   * 
