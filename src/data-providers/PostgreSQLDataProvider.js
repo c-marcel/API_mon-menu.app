@@ -1081,6 +1081,38 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
         return promise
     }
+
+    getRecipes(group)
+    {
+        var promise = new Promise((resolve, reject) =>
+        {
+            this.pool.query("SELECT id FROM " + this.tableName_recipes + " WHERE \"group\" = $1", [group]).then(function(res)
+            {
+                if (res.rowCount == 0)
+                {
+                    resolve({code: 404, data: null})
+                }
+
+                else
+                {
+                    var data = {recipes: []}
+
+                    for (let i = 0 ; i < res.rowCount ; i++)
+                    {
+                        var item = res.rows[i]
+                        data.recipes.push(item.id)
+                    }
+
+                    resolve({code: 200, data: data})
+                }
+            }).catch(e =>
+            {
+                resolve({code: 500, data: null})
+            })
+        })
+
+        return promise
+    }
 }
 
 module.exports.PostgreSQLDataProvider = PostgreSQLDataProvider

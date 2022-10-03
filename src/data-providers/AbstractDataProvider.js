@@ -192,6 +192,14 @@ class AbstractDataProvider
     {
         return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
     }
+
+    // Get list of recipe ids for provided group.
+    // 'group' parameter is a string that uniquely identify a recipe group.
+    // This method returns a Promise that will return data as JSON.
+    getRecipes(group)
+    {
+        return new Promise((resolve, reject) => { resolve({code: 501, data: null}) })
+    }
 }
 
 module.exports.AbstractDataProvider = AbstractDataProvider

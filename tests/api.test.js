@@ -2330,3 +2330,126 @@ describe('Computed fields for recipes (connected user)', () =>
         return promiseForHttpSuccess('GET', 'disconnect', 200)
     })
 })
+
+// Local storage.
+var g_group1_id  = ""
+
+describe('Create recipes and recipe group, check recipes/group link (connected user)', () =>
+{
+    test('Connection with valid login and password', () =>
+    {
+        return promiseForHttpSuccess('GET', 'connect?username=' + g_valid_username + '&password=' + g_valid_password, 200)
+    })
+
+    test('Create new recipe group', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createRecipeGroup', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_group1_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Create new recipe (1)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createRecipe', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_recipe1_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Create new recipe (2)', () =>
+    {
+        return promiseForHttpSuccess('POST', 'createRecipe', 200, (resolve, reject, data) =>
+        {
+            if (data.id)
+            {
+                g_recipe2_id = data.id
+                resolve()
+            }
+            
+            reject()
+        })
+    })
+
+    test('Get new recipe data (1)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe1_id, 200, (resolve, reject, data) =>
+        {
+            g_recipe1 = data
+            resolve()
+        })
+    })
+
+    test('Get new recipe data (1)', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipeData/' + g_recipe2_id, 200, (resolve, reject, data) =>
+        {
+            g_recipe2 = data
+            resolve()
+        })
+    })
+
+    test('Update new recipe data (1)', () =>
+    {
+        let d = g_recipe1
+
+        d.group = g_group1_id
+
+        return promiseForHttpSuccess('PUT', 'updateRecipe', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Update new recipe data (2)', () =>
+    {
+        let d = g_recipe2
+
+        d.group = g_group1_id
+
+        return promiseForHttpSuccess('PUT', 'updateRecipe', 200, (resolve, reject, data) =>
+        {
+            resolve()
+        }, d)
+    })
+
+    test('Get recipes from group', () =>
+    {
+        return promiseForHttpSuccess('GET', 'getRecipes?group=' + g_group1_id, 200, (resolve, reject, data) =>
+        {
+            if (!data.hasOwnProperty('recipes'))
+                reject()
+
+            if (!Array.isArray(data.recipes))
+                reject()
+
+            if (data.recipes.length != 2)
+                reject()
+
+            if (!data.recipes.includes(g_recipe1_id))
+                reject()
+
+            if (!data.recipes.includes(g_recipe2_id))
+                reject()
+
+            resolve()
+        })
+    })
+
+    test('Disconnect user', () =>
+    {
+        return promiseForHttpSuccess('GET', 'disconnect', 200)
+    })
+})
