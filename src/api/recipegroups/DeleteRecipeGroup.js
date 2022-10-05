@@ -8,7 +8,8 @@ var Parent = require('../AbstractEntryPoint')
 
 /**
   * @api {delete} /deleteRecipeGroup/:id Delete a recipe group
-  * @apiDescription Delete a recipe group into database.
+  * @apiDescription Delete a recipe group into database. Warning: when deleting a recipe group all linked
+  *                 recipes will keep group id and will be orphan.
   * @apiName deleteRecipeGroup
   * @apiGroup RecipeGroups
   * @apiVersion 1.0.0
