@@ -21,11 +21,13 @@ var Parent = require('../AbstractEntryPoint')
   * @apiQuery {String} password Password.
   *
   * @apiSuccess {String} level User level ('user' or 'admin').
+  * @apiSuccess {String} username User name.
   * 
   * @apiSuccessExample {json} Success-Response:
   *     HTTP/1.1 200 OK
   *     {
-  *         "level": "admin"
+  *         "level": "admin",
+  *         "username": "John Doe"
   *     }
   */
 class Connect extends Parent.AbstractEntryPoint

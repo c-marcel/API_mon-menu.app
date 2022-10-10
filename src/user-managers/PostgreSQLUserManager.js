@@ -59,7 +59,11 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
                 {
                     if (result)
                     {
-                        resolve({code: 200, data: {level: res[0].level}})
+                        resolve({code: 200, data:
+                        {
+                            level:      res[0].level,
+                            username:   res[0].username
+                        }})
                     }
                     
                     else
