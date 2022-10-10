@@ -36,6 +36,7 @@ var Parent = require('../AbstractEntryPoint')
   * @apiSuccess {String} recipes.ingredients.food Food identifier if ingredient is a food.
   * @apiSuccess {String} recipes.ingredients.recipe Recipe identifier if ingredient is a recipe.
   * @apiSuccess {Number} recipes.ingredients.quantity Ingredient quantity in kg.
+  * @apiSuccess {Number} recipes.ingredients.remainingQuantity Ingredient remaining quantity in kg if any (optional). In case of reused ingredient (e.g. oil).
   * @apiSuccess {Boolean} recipes.ingredients.raw Set to true if ingredient or recipe is used without cooking (for nutrients conservation).
   * @apiSuccess {Object} recipes.times Object containing times in minutes (as Number): preparation, cooking, rest.
   * @apiSuccess {Object} recipes.resources Object containing resources used for this recipe.
@@ -86,7 +87,8 @@ var Parent = require('../AbstractEntryPoint')
   *               [
   *                   {
   *                       "food": "5",
-  *                       "quantity": 0.4
+  *                       "quantity": 0.4,
+  *                       "remainingQuantity": 0.1
   *                   },
   *                   {
   *                       "food": "17",

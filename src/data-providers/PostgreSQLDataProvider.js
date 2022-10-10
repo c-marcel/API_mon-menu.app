@@ -821,9 +821,13 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 
                 if (food)
                 {
+                    let remainingQuantity = 0.0
+                    if (ingredient.hasOwnProperty('remainingQuantity'))
+                        remainingQuantity = ingredient.remainingQuantity
+
                     out.months = out.months.filter(value => food.months.includes(value))
-                    out.ingredientsCost += food.cost * ingredient.quantity
-                    out.environmentalImpact.ingredientsCo2eq += food.environmentalImpact.co2eq.kgco2e_kg * ingredient.quantity
+                    out.ingredientsCost += food.cost * (ingredient.quantity - remainingQuantity)
+                    out.environmentalImpact.ingredientsCo2eq += food.environmentalImpact.co2eq.kgco2e_kg * (ingredient.quantity - remainingQuantity)
                 }
             }
         }
@@ -852,9 +856,13 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 
                 if (lrecipe)
                 {
+                    let remainingQuantity = 0.0
+                    if (ingredient.hasOwnProperty('remainingQuantity'))
+                        remainingQuantity = ingredient.remainingQuantity
+
                     out.months = out.months.filter(value => lrecipe.months.includes(value))
-                    out.ingredientsCost += lrecipe.ingredientsCost * ingredient.quantity
-                    out.environmentalImpact.ingredientsCo2eq += lrecipe.environmentalImpact.ingredientsCo2eq * ingredient.quantity
+                    out.ingredientsCost += lrecipe.ingredientsCost * (ingredient.quantity - remainingQuantity)
+                    out.environmentalImpact.ingredientsCo2eq += lrecipe.environmentalImpact.ingredientsCo2eq * (ingredient.quantity - remainingQuantity)
                 }
             }
         }
@@ -993,9 +1001,9 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                                 converged = false
 
                             // Update stored data.
-                            storedData.ingredientsCost = computedRecipe.ingredientsCost
+                            storedData.ingredientsCost  = computedRecipe.ingredientsCost
                             storedData.ingredientsCo2eq = computedRecipe.environmentalImpact.ingredientsCo2eq
-                            storedData.months = computedRecipe.months
+                            storedData.months           = computedRecipe.months
 
                             currentFieldsValue[id] = storedData
                         }
