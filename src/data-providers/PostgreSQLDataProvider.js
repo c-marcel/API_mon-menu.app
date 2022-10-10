@@ -404,7 +404,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "DROP TABLE " + this.tableName_recipes })
 
             // Create table 'recipes'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], tags text[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
 
             // Add 'foods' data.
             for (let i = 0 ; i < data.foods.length ; i++)
@@ -454,7 +454,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 let entry = data.recipes[i];
                 let query = 
                 {
-                    query:  "INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)",
+                    query:  "INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, tags, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)",
                     values:
                     [
                         entry.id,
@@ -464,6 +464,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         entry.temperature,
                         entry.exclusions,
                         entry.months,
+                        entry.tags,
                         entry.nbOfParts,
                         entry.weight,
                         entry.picture,
@@ -511,7 +512,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
 
             // Create table 'recipes'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], tags text[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
 
             // Create table 'configuration'.
             var dataco2 =
@@ -544,7 +545,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ('" + uuidv4() + "', '', '', 0, 0, '{ \"meat\": false, \"fish\": false, \"dairy\": false, \"eggs\": false, \"oap\": false }', ARRAY[]::integer[], 0.0, 0.0, '', '', ARRAY[]::json[], '{ \"preparation\": 0.0, \"cooking\": 0.0, \"rest\": 0.0 }', '{ \"energy\": {\"oven\": 0.0, \"hob\": 0.0, \"kettle\": 0.0}, \"water\": 0.0 }', 0.0, '{\"ingredientsCo2eq\": 0.0}', '{ \"water\": 0.0, \"recyclable\": { \"ingredients\": {}, \"biodegradable\": 0.0, \"plastics\": 0.0, \"bricks\": 0.0, \"papers\": 0.0, \"glasses\": 0.0, \"others\": 0.0 }, \"nonRecyclable\": 0.0 }') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, tags, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ('" + uuidv4() + "', '', '', 0, 0, '{ \"meat\": false, \"fish\": false, \"dairy\": false, \"eggs\": false, \"oap\": false }', ARRAY[]::integer[], ARRAY[]::text[], 0.0, 0.0, '', '', ARRAY[]::json[], '{ \"preparation\": 0.0, \"cooking\": 0.0, \"rest\": 0.0 }', '{ \"energy\": {\"oven\": 0.0, \"hob\": 0.0, \"kettle\": 0.0}, \"water\": 0.0 }', 0.0, '{\"ingredientsCo2eq\": 0.0}', '{ \"water\": 0.0, \"recyclable\": { \"ingredients\": {}, \"biodegradable\": 0.0, \"plastics\": 0.0, \"bricks\": 0.0, \"papers\": 0.0, \"glasses\": 0.0, \"others\": 0.0 }, \"nonRecyclable\": 0.0 }') RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -621,7 +622,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("SELECT id, \"group\", details, type, temperature, exclusions, months, \"nbOfParts\", weight, times, resources, \"ingredientsCost\", \"environmentalImpact\" FROM " + this.tableName_recipes + " WHERE id = $1", [id]).then(function(res)
+            this.pool.query("SELECT id, \"group\", details, type, temperature, exclusions, months, tags, \"nbOfParts\", weight, times, resources, \"ingredientsCost\", \"environmentalImpact\" FROM " + this.tableName_recipes + " WHERE id = $1", [id]).then(function(res)
             {
                 if (res.rowCount == 0)
                 {
@@ -656,22 +657,24 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                                               temperature = $4, \
                                               exclusions = $5, \
                                               months = $6, \
-                                              \"nbOfParts\" = $7, \
-                                              weight = $8, \
-                                              picture = $9, \
-                                              recipe = $10, \
-                                              ingredients = $11, \
-                                              times = $12, \
-                                              resources = $13, \
-                                              \"ingredientsCost\" = $14, \
-                                              \"environmentalImpact\" = $15, \
-                                              waste = $16 \
-                                              WHERE id = $17 RETURNING *", [object.group,
+                                              tags = $7, \
+                                              \"nbOfParts\" = $8, \
+                                              weight = $9, \
+                                              picture = $10, \
+                                              recipe = $11, \
+                                              ingredients = $12, \
+                                              times = $13, \
+                                              resources = $14, \
+                                              \"ingredientsCost\" = $15, \
+                                              \"environmentalImpact\" = $16, \
+                                              waste = $17 \
+                                              WHERE id = $18 RETURNING *", [object.group,
                                                                object.details,
                                                                object.type,
                                                                object.temperature,
                                                                object.exclusions,
                                                                object.months,
+                                                               object.tags,
                                                                object.nbOfParts,
                                                                object.weight,
                                                                object.picture,

@@ -23,6 +23,7 @@ var Parent = require('../AbstractEntryPoint')
   * @apiSuccess {String} food.id Food identifier as guid.
   * @apiSuccess {String} food.title Food title.
   * @apiSuccess {String} food.details Food subtitle.
+  * @apiSuccess {String} food.picture Food picture into food images directory.
   * @apiSuccess {Array} food.months Array containing months when food is available (1: January, ...).
   * @apiSuccess {Number} food.supplyArea Enumeration for supply area (0: not defined, 1: local, 2: national, 4: continental, 8: global). 
   * @apiSuccess {Number} food.cost Cost in euro per kilogram.
@@ -61,6 +62,7 @@ var Parent = require('../AbstractEntryPoint')
   *         "id":                     "1",
   *         "title":                  'Noisettes',
   *         "details":                'entières, décortiquées, bio, en vrac',
+  *         "picture":                'image1.png',
   *         "months":                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   *         "supplyArea":             1,
   *         "cost":                   19.3,

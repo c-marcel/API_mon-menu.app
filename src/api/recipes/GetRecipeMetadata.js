@@ -27,6 +27,7 @@ var Parent = require('../AbstractEntryPoint')
   * @apiSuccess {Object} recipes.exclusions Exclusions objet. Define boolean attributes set to true if the recipe 
   *                      doesn't contain such type of food. Attributes: meat, fish, dairy, eggs, oap (other animal products).
   * @apiSuccess {Number[]} recipes.months Array containing months for foods supply.
+  * @apiSuccess {String[]} recipes.tags Array containing hashtags.
   * @apiSuccess {Number} recipes.nbOfParts Number of parts for the recipe.
   * @apiSuccess {Number} recipes.weight Total weight (in kg) for the final product.
   * @apiSuccess {Object} recipes.times Object containing times in minutes (as Number): preparation, cooking, rest.
@@ -57,6 +58,7 @@ var Parent = require('../AbstractEntryPoint')
   *                   "oap": false
   *               },
   *               "months": [3, 4, 5],
+  *               "tags": ['verygood'],
   *               "nbOfParts": 6,
   *               "weight": 0.9,
   *               "times":
