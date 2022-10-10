@@ -336,7 +336,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 recipes:        []
             }
 
-            this.pool.query("SELECT * FROM " + this.tableName_foods).then(function(res)
+            this.pool.query("SELECT * FROM " + lthis.tableName_foods).then(function(res)
             {
                 for (let i = 0 ; i < res.rowCount ; i++)
                 {
@@ -344,7 +344,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                     data.foods.push(item)
                 }
 
-                lthis.pool.query("SELECT * FROM " + this.tableName_recipegroups).then(function(res)
+                lthis.pool.query("SELECT * FROM " + lthis.tableName_recipegroups).then(function(res)
                 {
                     for (let i = 0 ; i < res.rowCount ; i++)
                     {
@@ -352,7 +352,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         data.recipeGroups.push(item)
                     }
 
-                    lthis.pool.query("SELECT * FROM " + this.tableName_recipes).then(function(res)
+                    lthis.pool.query("SELECT * FROM " + lthis.tableName_recipes).then(function(res)
                     {
                         for (let i = 0 ; i < res.rowCount ; i++)
                         {
