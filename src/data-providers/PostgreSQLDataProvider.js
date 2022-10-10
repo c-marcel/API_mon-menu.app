@@ -163,7 +163,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO " + this.tableName_foods + " (id, title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition) VALUES ('" + uuidv4() + "', '', '', ARRAY[]::integer[], 0, 0.0, '{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }', '{ \"energy\": { \"value\": 0.0, \"source\": \"\" }, \"proteins\": { \"value\": 0.0, \"source\": \"\" }, \"carbohydrates\": { \"value\": 0.0, \"source\": \"\" }, \"lipids\": { \"value\": 0.0, \"source\": \"\" }, \"sugars\": { \"value\": 0.0, \"source\": \"\" }, \"fibers\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_ala\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_epa\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_dha\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_la\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_ara\": { \"value\": 0.0, \"source\": \"\" }, \"omega9\": { \"value\": 0.0, \"source\": \"\" }, \"salt\": { \"value\": 0.0, \"source\": \"\" }, \"calcium\": { \"value\": 0.0, \"source\": \"\" }, \"copper\": { \"value\": 0.0, \"source\": \"\" }, \"iron\": { \"value\": 0.0, \"source\": \"\" }, \"iodine\": { \"value\": 0.0, \"source\": \"\" }, \"magnesium\": { \"value\": 0.0, \"source\": \"\" }, \"sodium\": { \"value\": 0.0, \"source\": \"\" }, \"zinc\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_c\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_d\": { \"value\": 0.0, \"source\": \"\" } }') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_foods + " (id, title, details, picture, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition) VALUES ('" + uuidv4() + "', '', '', '', ARRAY[]::integer[], 0, 0.0, '{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }', '{ \"energy\": { \"value\": 0.0, \"source\": \"\" }, \"proteins\": { \"value\": 0.0, \"source\": \"\" }, \"carbohydrates\": { \"value\": 0.0, \"source\": \"\" }, \"lipids\": { \"value\": 0.0, \"source\": \"\" }, \"sugars\": { \"value\": 0.0, \"source\": \"\" }, \"fibers\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_ala\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_epa\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_dha\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_la\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_ara\": { \"value\": 0.0, \"source\": \"\" }, \"omega9\": { \"value\": 0.0, \"source\": \"\" }, \"salt\": { \"value\": 0.0, \"source\": \"\" }, \"calcium\": { \"value\": 0.0, \"source\": \"\" }, \"copper\": { \"value\": 0.0, \"source\": \"\" }, \"iron\": { \"value\": 0.0, \"source\": \"\" }, \"iodine\": { \"value\": 0.0, \"source\": \"\" }, \"magnesium\": { \"value\": 0.0, \"source\": \"\" }, \"sodium\": { \"value\": 0.0, \"source\": \"\" }, \"zinc\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_c\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_d\": { \"value\": 0.0, \"source\": \"\" } }') RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -261,14 +261,16 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         {
             this.pool.query("UPDATE " + this.tableName_foods + " SET title = $1, \
                                               details = $2, \
-                                              months = $3, \
-                                              \"supplyArea\" = $4, \
-                                              cost = $5, \
-                                              \"environmentalImpact\" = $6, \
-                                              nutrition = $7, \
-                                              units = $8 \
-                                              WHERE id = $9 RETURNING *", [object.title,
+                                              picture = $3, \
+                                              months = $4, \
+                                              \"supplyArea\" = $5, \
+                                              cost = $6, \
+                                              \"environmentalImpact\" = $7, \
+                                              nutrition = $8, \
+                                              units = $9 \
+                                              WHERE id = $10 RETURNING *", [object.title,
                                                                object.details,
+                                                               object.picture,
                                                                object.months,
                                                                object.supplyArea,
                                                                object.cost,
@@ -390,7 +392,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "DROP TABLE " + this.tableName_foods })
 
             // Create table 'foods'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, picture text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
 
             // Drop table 'recipegroups'.
             queries.push({ query: "DROP TABLE " + this.tableName_recipegroups })
@@ -410,12 +412,13 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 let entry = data.foods[i];
                 let query = 
                 {
-                    query:  "INSERT INTO " + this.tableName_foods + " (id, title, details, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition, units) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+                    query:  "INSERT INTO " + this.tableName_foods + " (id, title, details, picture, months, \"supplyArea\", cost, \"environmentalImpact\", nutrition, units) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
                     values:
                     [
                         entry.id,
                         entry.title,
                         entry.details,
+                        entry.picture,
                         entry.months,
                         entry.supplyArea,
                         entry.cost,
@@ -502,7 +505,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             const queries = [];
 
             // Create table 'foods'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, picture text, months integer[], \"supplyArea\" integer, cost double precision, \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
 
             // Create table 'recipegroups'.
             queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
