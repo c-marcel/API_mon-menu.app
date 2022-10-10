@@ -454,27 +454,10 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 let entry = data.recipes[i];
                 let query = 
                 {
-                    query:  "INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, tags, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)",
+                    query:  "INSERT INTO " + this.tableName_recipes + " (id) VALUES ($1)",
                     values:
                     [
-                        entry.id,
-                        entry.group,
-                        entry.details,
-                        entry.type,
-                        entry.temperature,
-                        entry.exclusions,
-                        entry.months,
-                        entry.tags,
-                        entry.nbOfParts,
-                        entry.weight,
-                        entry.picture,
-                        entry.recipe,
-                        entry.ingredients,
-                        entry.times,
-                        entry.resources,
-                        entry.ingredientsCost,
-                        entry.environmentalImpact,
-                        entry.waste
+                        entry.id
                     ]
                 }
 
@@ -485,8 +468,17 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             const sql = pgp.helpers.concat(queries);
 
             // Execute queries.
+            var lthis = this;
+
             this.pool.query(sql).then(function(res)
             {
+                // Update recipes to add ingredients.
+                for (let i = 0 ; i < data.recipes.length ; i++)
+                {
+                    let entry = data.recipes[i];
+                    lthis.updateRecipe(entry)
+                }
+
                 resolve({code: 200, data: null})
             }).catch(e =>
             {
