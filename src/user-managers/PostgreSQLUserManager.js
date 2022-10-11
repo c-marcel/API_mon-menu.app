@@ -61,8 +61,11 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
                     {
                         resolve({code: 200, data:
                         {
-                            level:      res[0].level,
-                            username:   res[0].username
+                            level:          res[0].level,
+                            username:       res[0].username,
+                            userData:       res[0].userData,
+                            kitchenData:    res[0].kitchenData,
+                            energyData:     res[0].energyData,
                         }})
                     }
                     
@@ -84,7 +87,7 @@ class PostgreSQLUserManager extends Parent.AbstractUserManager
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.client.querySync("CREATE TABLE IF NOT EXISTS " + this.tableName_users + " (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, username text, \"passwordHash\" text, level text, PRIMARY KEY(id));")
+            this.client.querySync("CREATE TABLE IF NOT EXISTS " + this.tableName_users + " (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY, username text, \"passwordHash\" text, level text, \"userData\" json, \"kitchenData\" json, \"energyData\" json, PRIMARY KEY(id));")
             resolve({code: 200, data: null})
         })
 

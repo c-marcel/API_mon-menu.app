@@ -21,13 +21,39 @@ var Parent = require('../AbstractEntryPoint')
   * @apiQuery {String} password Password.
   *
   * @apiSuccess {String} level User level ('user' or 'admin').
-  * @apiSuccess {String} username User name.
+  * @apiSuccess {String} username User name for connection.
+  * @apiSuccess {String} userData User data object.
+  * @apiSuccess {String} userData.firstname User firstname.
+  * @apiSuccess {String} userData.name User name.
+  * @apiSuccess {String} kitchenData Kitchen data object.
+  * @apiSuccess {String} kitchenData.ovenEnergy Energy for oven: 'electricity' or 'gas'.
+  * @apiSuccess {String} kitchenData.hobEnergy Energy for hob: 'electricity' or 'gas'.
+  * @apiSuccess {String} kitchenData.kettleEnergy Energy for kettle: 'electricity' or 'gas'.
+  * @apiSuccess {String} energyData Energy data object.
+  * @apiSuccess {String} energyData.electricityCost Electricity cost in c€ per kWh.
+  * @apiSuccess {String} energyData.gasCost Gas cost in c€ per kWh.
   * 
   * @apiSuccessExample {json} Success-Response:
   *     HTTP/1.1 200 OK
   *     {
   *         "level": "admin",
-  *         "username": "John Doe"
+  *         "username": "j.doe2",
+  *         "userData":
+  *          {
+  *              "firstname": "John",
+  *              "name":      "Doe"
+  *          },
+  *          "kitchenData":
+  *          {
+  *              "ovenEnergy":   "electricity",
+  *              "hobEnergy":    "gas",
+  *              "kettleEnergy": "electricity"
+  *          },
+  *          "energyData":
+  *          {
+  *              "electricityCost": 11.7,
+  *              "gasCost":         8.5
+  *          }
   *     }
   */
 class Connect extends Parent.AbstractEntryPoint
