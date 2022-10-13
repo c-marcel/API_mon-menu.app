@@ -11,6 +11,7 @@ const sqlite  = require('better-sqlite3')
 const session = require('express-session')
 const config  = require('./src/config')
 const express = require('express');
+const nocache = require('nocache');
 const https   = require('https');
 const http    = require('http');
 const fs      = require('fs');
@@ -65,6 +66,7 @@ const g_app = express()
 
 g_app.use(express.static('public'));
 g_app.use(express.json());
+g_app.use(nocache());
 g_app.use(session(
 {
     store:              sessionStore,
@@ -73,8 +75,7 @@ g_app.use(session(
     resave:             false,
     cookie:
     {
-        secure: g_config.server.connection.secure,
-        maxAge: 15 * 60 * 1000
+        secure: g_config.server.connection.secure
     }
 }))
 

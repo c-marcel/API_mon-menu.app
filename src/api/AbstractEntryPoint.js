@@ -9,18 +9,7 @@
 // class and implement the method executeImplementation().
 
 // Try to load config file.
-var config = null
-try
-{
-    config = require('../config')
-}
-catch
-{
-    console.error("Fatal error: cannot find 'config.js' file into 'src' directory.")
-    console.error("Please create 'src/config.js' file from provided templates.")
-
-    process.exit([1]);
-}
+const config = require('../config')
 
 function createErrorAnswer(error, details)
 {
