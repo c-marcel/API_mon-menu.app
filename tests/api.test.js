@@ -1246,37 +1246,10 @@ describe('Create, delete, update recipes (connected user)', () =>
             if (typeof data.temperature != 'number')
                 reject()
 
-            if (!data.hasOwnProperty('exclusions'))
+            if (!data.hasOwnProperty('contains'))
                 reject()
 
-            if (!data.exclusions.hasOwnProperty('meat'))
-                reject()
-
-            if (typeof data.exclusions.meat != 'boolean')
-                reject()
-
-                if (!data.exclusions.hasOwnProperty('fish'))
-                reject()
-
-            if (typeof data.exclusions.fish != 'boolean')
-                reject()
-                
-            if (!data.exclusions.hasOwnProperty('dairy'))
-                reject()
-
-            if (typeof data.exclusions.dairy != 'boolean')
-                reject()
-                
-            if (!data.exclusions.hasOwnProperty('eggs'))
-                reject()
-
-            if (typeof data.exclusions.eggs != 'boolean')
-                reject()
-                
-            if (!data.exclusions.hasOwnProperty('oap'))
-                reject()
-
-            if (typeof data.exclusions.oap != 'boolean')
+            if (!Array.isArray(data.contains))
                 reject()
 
             if (!data.hasOwnProperty('months'))
@@ -1397,37 +1370,10 @@ describe('Create, delete, update recipes (connected user)', () =>
             if (typeof data.temperature != 'number')
                 reject()
 
-            if (!data.hasOwnProperty('exclusions'))
+            if (!data.hasOwnProperty('contains'))
                 reject()
 
-            if (!data.exclusions.hasOwnProperty('meat'))
-                reject()
-
-            if (typeof data.exclusions.meat != 'boolean')
-                reject()
-
-                if (!data.exclusions.hasOwnProperty('fish'))
-                reject()
-
-            if (typeof data.exclusions.fish != 'boolean')
-                reject()
-                
-            if (!data.exclusions.hasOwnProperty('dairy'))
-                reject()
-
-            if (typeof data.exclusions.dairy != 'boolean')
-                reject()
-                
-            if (!data.exclusions.hasOwnProperty('eggs'))
-                reject()
-
-            if (typeof data.exclusions.eggs != 'boolean')
-                reject()
-                
-            if (!data.exclusions.hasOwnProperty('oap'))
-                reject()
-
-            if (typeof data.exclusions.oap != 'boolean')
+            if (!Array.isArray(data.contains))
                 reject()
 
             if (!data.hasOwnProperty('months'))
@@ -1595,14 +1541,7 @@ describe('Create, delete, update recipes (connected user)', () =>
         d.details = "Vegan version"
         d.type = 2
         d.temperature = 1
-        d.exclusions = 
-        {
-            meat: true, 
-            fish: false, 
-            dairy: true, 
-            eggs: false, 
-            oap: true
-        }
+        d.contains = ["meat", "fish", "eggs"],
         d.months = [5, 6, 7, 8]
         d.nbOfParts = 7
         d.weight = 0.75
@@ -1676,19 +1615,16 @@ describe('Create, delete, update recipes (connected user)', () =>
             if (data.temperature != 1)
                 reject()
 
-            if (data.exclusions.meat != true)
+            if (data.contains.length != 3)
                 reject()
 
-            if (data.exclusions.fish != false)
+            if (!data.contains.includes("meat"))
                 reject()
 
-            if (data.exclusions.dairy != true)
+            if (!data.contains.includes("fish"))
                 reject()
 
-            if (data.exclusions.eggs != false)
-                reject()
-
-            if (data.exclusions.oap != true)
+            if (!data.contains.includes("eggs"))
                 reject()
 
             if (data.months.length != 4)
