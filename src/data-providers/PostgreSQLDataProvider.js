@@ -1037,7 +1037,15 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         let i_ingredientsCost  = initialRecipes[id].ingredientsCost
                         let i_ingredientsCo2eq = initialRecipes[id].environmentalImpact.ingredientsCo2eq
                         let i_monthsNumber     = lthis.monthsArrayToNumber(initialRecipes[id].months)
-                        let i_contains         = initialRecipes[id].contains.join('|')
+
+                        // Create 'contains' if not defined.
+                        let containsUndefined = false
+                        if (initialRecipes[id].contains == null)
+                        {
+                            containsUndefined = true
+                            initialRecipes[id].contains = []
+                        }
+                        let i_contains = initialRecipes[id].contains.join('|')
 
                         // Get final values.
                         let recipe = computedRecipesWithFoods[id]
@@ -1063,7 +1071,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         if (i_monthsNumber != f_monthsNumber)
                             updated = true
 
-                        if (i_contains != f_contains)
+                        if (i_contains != f_contains || containsUndefined)
                             updated = true
 
                         if (updated)
