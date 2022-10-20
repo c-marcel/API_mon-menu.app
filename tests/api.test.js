@@ -259,7 +259,7 @@ describe('Database connection', () =>
     })
 })
 
-// Test connection to database.
+// Test Api version and configuration.
 describe('Api version and configuration', () =>
 {
     test('Api access and version', () =>
@@ -877,6 +877,12 @@ describe('Create, delete, update foods (connected user)', () =>
             if (!data.hasOwnProperty('cost'))
                 reject()
 
+            if (!data.hasOwnProperty('contains'))
+                reject()
+
+            if (!Array.isArray(data.contains))
+                reject()
+
             if (typeof data.cost != 'number')
                 reject()
 
@@ -938,6 +944,7 @@ describe('Create, delete, update foods (connected user)', () =>
         d.title         = "New title"
         d.details       = "My details"
         d.months        = [1, 4, 9]
+        d.contains      = ["meat", "fish"]
         d.supplyArea    = 2
         d.cost          = 12.3
 
@@ -990,6 +997,15 @@ describe('Create, delete, update foods (connected user)', () =>
                 reject()
 
             if (data.cost != 12.3)
+                reject()
+
+            if (data.contains.length != 2)
+                reject()
+
+            if (!data.contains.includes("meat"))
+                reject()
+
+            if (!data.contains.includes("fish"))
                 reject()
 
             if (data.environmentalImpact.co2eq.kgco2e_kg != 0.789)

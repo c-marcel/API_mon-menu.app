@@ -24,9 +24,11 @@ var Parent = require('../AbstractEntryPoint')
   * @apiSuccess {String} food.title Food title.
   * @apiSuccess {String} food.details Food subtitle.
   * @apiSuccess {String} food.picture Food picture into food images directory.
-  * @apiSuccess {Array} food.months Array containing months when food is available (1: January, ...).
+  * @apiSuccess {Array}  food.months Array containing months when food is available (1: January, ...).
   * @apiSuccess {Number} food.supplyArea Enumeration for supply area (0: not defined, 1: local, 2: national, 4: continental, 8: global). 
   * @apiSuccess {Number} food.cost Cost in euro per kilogram.
+  * @apiSuccess {Array}  food.contains Array containing strings defining some type of food ('meat', 'fish', 'dairy', 'eggs', 'gluten', 
+  *                      'shellfish', 'peanuts', 'soy', 'nuts', 'celery', 'mustard', 'sesame', 'SOx', 'lupin', 'molluscs', 'alcohol', 'pork').
   * @apiSuccess {Object} food.environmentalImpact Object containing environmental impact.
   * @apiSuccess {Object} food.environmentalImpact.co2eq Object containing CO2 impact.
   * @apiSuccess {Number} food.environmentalImpact.co2eq.kgco2e_kg Equivalent C02 in kg per kg of food.
@@ -66,6 +68,7 @@ var Parent = require('../AbstractEntryPoint')
   *         "months":                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   *         "supplyArea":             1,
   *         "cost":                   19.3,
+  *         "contains":               ["meat", "alcohol"],
   *         "environmentalImpact":
   *         {
   *             "co2eq":
