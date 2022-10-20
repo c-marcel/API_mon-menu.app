@@ -28,7 +28,7 @@ var Parent = require('../AbstractEntryPoint')
   * @apiSuccess {Number} food.supplyArea Enumeration for supply area (0: not defined, 1: local, 2: national, 4: continental, 8: global). 
   * @apiSuccess {Number} food.cost Cost in euro per kilogram.
   * @apiSuccess {Array}  food.contains Array containing strings defining some type of food ('meat', 'fish', 'dairy', 'eggs', 'gluten', 
-  *                      'shellfish', 'peanuts', 'soy', 'nuts', 'celery', 'mustard', 'sesame', 'SOx', 'lupin', 'molluscs', 'alcohol', 'pork').
+  *                      'shellfish', 'peanuts', 'soy', 'nuts', 'celery', 'mustard', 'sesame', 'SOx', 'lupin', 'molluscs', 'alcohol', 'pork', 'oap').
   * @apiSuccess {Object} food.environmentalImpact Object containing environmental impact.
   * @apiSuccess {Object} food.environmentalImpact.co2eq Object containing CO2 impact.
   * @apiSuccess {Number} food.environmentalImpact.co2eq.kgco2e_kg Equivalent C02 in kg per kg of food.

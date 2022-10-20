@@ -24,8 +24,7 @@ var Parent = require('../AbstractEntryPoint')
   * @apiSuccess {String} recipes.details Recipe details (subtitle).
   * @apiSuccess {Number} recipes.type Recipe type: 0 - undefined, 1 - aperitif, 2 - starter, 4 - dish, 8 - dessert.
   * @apiSuccess {Number} recipes.temperature Temperature of service: 0 - indifferent, 1 - cold, 2 - hot.
-  * @apiSuccess {Object} recipes.exclusions Exclusions objet. Define boolean attributes set to true if the recipe 
-  *                      doesn't contain such type of food. Attributes: meat, fish, dairy, eggs, oap (other animal products).
+  * @apiSuccess {String[]} recipes.contains Array of strings computed with the 'contains' fields of foods.
   * @apiSuccess {Number[]} recipes.months Array containing months for foods supply.
   * @apiSuccess {String[]} recipes.tags Array containing hashtags.
   * @apiSuccess {Number} recipes.nbOfParts Number of parts for the recipe.
@@ -49,14 +48,7 @@ var Parent = require('../AbstractEntryPoint')
   *               "details": "végétarienne",
   *               "type": 4,
   *               "temperature": 2,
-  *               "exclusions":
-  *               {
-  *                   "meat": true,
-  *                   "fish": true,
-  *                   "dairy": false,
-  *                   "eggs": true,
-  *                   "oap": false
-  *               },
+  *               "contains": ["meat", "eggs"],
   *               "months": [3, 4, 5],
   *               "tags": ['verygood'],
   *               "nbOfParts": 6,

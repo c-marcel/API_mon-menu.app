@@ -406,7 +406,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "DROP TABLE " + this.tableName_recipes })
 
             // Create table 'recipes'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], tags text[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, contains text[], months integer[], tags text[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
 
             // Add 'foods' data.
             for (let i = 0 ; i < data.foods.length ; i++)
@@ -507,7 +507,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
 
             // Create table 'recipes'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, exclusions json, months integer[], tags text[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipes + " (id text NOT NULL, \"group\" text, details text, type integer, temperature integer, contains text[], months integer[], tags text[], \"nbOfParts\" double precision, weight double precision, picture text, recipe text, ingredients json[], times json, resources json, \"ingredientsCost\" double precision, \"environmentalImpact\" json, waste json, PRIMARY KEY(id));" })
 
             // Create table 'configuration'.
             var dataco2 =
@@ -540,7 +540,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, exclusions, months, tags, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ('" + uuidv4() + "', '', '', 0, 0, '{ \"meat\": false, \"fish\": false, \"dairy\": false, \"eggs\": false, \"oap\": false }', ARRAY[]::integer[], ARRAY[]::text[], 0.0, 0.0, '', '', ARRAY[]::json[], '{ \"preparation\": 0.0, \"cooking\": 0.0, \"rest\": 0.0 }', '{ \"energy\": {\"oven\": 0.0, \"hob\": 0.0, \"kettle\": 0.0}, \"water\": 0.0 }', 0.0, '{\"ingredientsCo2eq\": 0.0}', '{ \"water\": 0.0, \"recyclable\": { \"ingredients\": {}, \"biodegradable\": 0.0, \"plastics\": 0.0, \"bricks\": 0.0, \"papers\": 0.0, \"glasses\": 0.0, \"others\": 0.0 }, \"nonRecyclable\": 0.0 }') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_recipes + " (id, \"group\", details, type, temperature, contains, months, tags, \"nbOfParts\", weight, picture, recipe, ingredients, times, resources, \"ingredientsCost\", \"environmentalImpact\", waste) VALUES ('" + uuidv4() + "', '', '', 0, 0, ARRAY[]::text[], ARRAY[]::integer[], ARRAY[]::text[], 0.0, 0.0, '', '', ARRAY[]::json[], '{ \"preparation\": 0.0, \"cooking\": 0.0, \"rest\": 0.0 }', '{ \"energy\": {\"oven\": 0.0, \"hob\": 0.0, \"kettle\": 0.0}, \"water\": 0.0 }', 0.0, '{\"ingredientsCo2eq\": 0.0}', '{ \"water\": 0.0, \"recyclable\": { \"ingredients\": {}, \"biodegradable\": 0.0, \"plastics\": 0.0, \"bricks\": 0.0, \"papers\": 0.0, \"glasses\": 0.0, \"others\": 0.0 }, \"nonRecyclable\": 0.0 }') RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
@@ -617,7 +617,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("SELECT id, \"group\", details, type, temperature, exclusions, months, tags, \"nbOfParts\", weight, times, resources, \"ingredientsCost\", \"environmentalImpact\" FROM " + this.tableName_recipes + " WHERE id = $1", [id]).then(function(res)
+            this.pool.query("SELECT id, \"group\", details, type, temperature, contains, months, tags, \"nbOfParts\", weight, times, resources, \"ingredientsCost\", \"environmentalImpact\" FROM " + this.tableName_recipes + " WHERE id = $1", [id]).then(function(res)
             {
                 if (res.rowCount == 0)
                 {
@@ -650,24 +650,22 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                                               details = $2, \
                                               type = $3, \
                                               temperature = $4, \
-                                              exclusions = $5, \
-                                              months = $6, \
-                                              tags = $7, \
-                                              \"nbOfParts\" = $8, \
-                                              weight = $9, \
-                                              picture = $10, \
-                                              recipe = $11, \
-                                              ingredients = $12, \
-                                              times = $13, \
-                                              resources = $14, \
-                                              \"ingredientsCost\" = $15, \
-                                              \"environmentalImpact\" = $16, \
-                                              waste = $17 \
-                                              WHERE id = $18 RETURNING *", [object.group,
+                                              months = $5, \
+                                              tags = $6, \
+                                              \"nbOfParts\" = $7, \
+                                              weight = $8, \
+                                              picture = $9, \
+                                              recipe = $10, \
+                                              ingredients = $11, \
+                                              times = $12, \
+                                              resources = $13, \
+                                              \"ingredientsCost\" = $14, \
+                                              \"environmentalImpact\" = $15, \
+                                              waste = $16 \
+                                              WHERE id = $17 RETURNING *", [object.group,
                                                                object.details,
                                                                object.type,
                                                                object.temperature,
-                                                               object.exclusions,
                                                                object.months,
                                                                object.tags,
                                                                object.nbOfParts,
@@ -801,6 +799,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         out.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         out.ingredientsCost = 0.0
         out.environmentalImpact.ingredientsCo2eq = 0.0
+        out.contains = []
 
         // Add ingredients values.
         for(let i = 0 ; i < recipe.ingredients.length ; i++)
@@ -823,6 +822,12 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                     out.months = out.months.filter(value => food.months.includes(value))
                     out.ingredientsCost += food.cost * (ingredient.quantity - remainingQuantity)
                     out.environmentalImpact.ingredientsCo2eq += food.environmentalImpact.co2eq.kgco2e_kg * (ingredient.quantity - remainingQuantity)
+
+                    for (let j = 0 ; j < food.contains.length ; j++)
+                    {
+                        if (!out.contains.includes(food.contains[j]))
+                            out.contains.push(food.contains[j])
+                    }
                 }
             }
         }
@@ -858,9 +863,17 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                     out.months = out.months.filter(value => lrecipe.months.includes(value))
                     out.ingredientsCost += lrecipe.ingredientsCost * (ingredient.quantity - remainingQuantity)
                     out.environmentalImpact.ingredientsCo2eq += lrecipe.environmentalImpact.ingredientsCo2eq * (ingredient.quantity - remainingQuantity)
+
+                    for (let j = 0 ; j < lrecipe.contains.length ; j++)
+                    {
+                        if (!out.contains.includes(lrecipe.contains[j]))
+                            out.contains.push(lrecipe.contains[j])
+                    }
                 }
             }
         }
+
+        out.contains.sort()
 
         return out
     }
@@ -874,11 +887,14 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         {
             let recipe = recipesWithFoodsAndRecipes[id]
             
+            recipe.contains.sort()
+            
             let values =
             {
-                months: recipe.months,
-                ingredientsCost: recipe.ingredientsCost,
-                ingredientsCo2eq : recipe.environmentalImpact.ingredientsCo2eq
+                months:             recipe.months,
+                ingredientsCost:    recipe.ingredientsCost,
+                ingredientsCo2eq :  recipe.environmentalImpact.ingredientsCo2eq,
+                contains:           recipe.contains
             }
 
             out[id] = values
@@ -911,7 +927,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             let lthis = this
 
             // Get foods.
-            this.pool.query("SELECT id, months, cost, \"environmentalImpact\" FROM " + this.tableName_foods).then(function(res)
+            this.pool.query("SELECT id, months, cost, contains, \"environmentalImpact\" FROM " + this.tableName_foods).then(function(res)
             {
                 let foods = {}
                 let beginDateTimeMs = Date.now()
@@ -923,7 +939,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                 }
 
                 // Get recipes.
-                lthis.pool.query("SELECT id, months, ingredients, \"ingredientsCost\", \"environmentalImpact\" FROM " + lthis.tableName_recipes).then(function(res)
+                lthis.pool.query("SELECT id, months, ingredients, contains, \"ingredientsCost\", \"environmentalImpact\" FROM " + lthis.tableName_recipes).then(function(res)
                 {
                     let recipes = {}
 
@@ -995,10 +1011,14 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                             if (initialMonthsNumber != computedMonthsNumber)
                                 converged = false
 
+                            if (computedRecipe.contains.join('|') != storedData.contains.join('|'))
+                                converged = false
+
                             // Update stored data.
                             storedData.ingredientsCost  = computedRecipe.ingredientsCost
                             storedData.ingredientsCo2eq = computedRecipe.environmentalImpact.ingredientsCo2eq
                             storedData.months           = computedRecipe.months
+                            storedData.contains         = computedRecipe.contains
 
                             currentFieldsValue[id] = storedData
                         }
@@ -1017,6 +1037,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         let i_ingredientsCost  = initialRecipes[id].ingredientsCost
                         let i_ingredientsCo2eq = initialRecipes[id].environmentalImpact.ingredientsCo2eq
                         let i_monthsNumber     = lthis.monthsArrayToNumber(initialRecipes[id].months)
+                        let i_contains         = initialRecipes[id].contains.join('|')
 
                         // Get final values.
                         let recipe = computedRecipesWithFoods[id]
@@ -1029,6 +1050,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         let f_ingredientsCost  = recipe.ingredientsCost
                         let f_ingredientsCo2eq = recipe.environmentalImpact.ingredientsCo2eq
                         let f_monthsNumber     = lthis.monthsArrayToNumber(recipe.months)
+                        let f_contains         = recipe.contains.join('|')
 
                         let updated = false
 
@@ -1041,18 +1063,22 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
                         if (i_monthsNumber != f_monthsNumber)
                             updated = true
 
+                        if (i_contains != f_contains)
+                            updated = true
+
                         if (updated)
                         {
                             updatedRecipes.push(id)
 
                             queries.push(
                             {
-                                query: "UPDATE " + lthis.tableName_recipes + " SET months = $1, \"ingredientsCost\" = $2, \"environmentalImpact\" = $3 WHERE id = $4;",
+                                query: "UPDATE " + lthis.tableName_recipes + " SET months = $1, \"ingredientsCost\" = $2, \"environmentalImpact\" = $3, contains = $4 WHERE id = $5;",
                                 values:
                                 [
                                     recipe.months,
                                     recipe.ingredientsCost,
                                     recipe.environmentalImpact,
+                                    recipe.contains,
                                     recipe.id
                                 ]
                             })

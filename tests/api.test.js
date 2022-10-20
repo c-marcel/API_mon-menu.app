@@ -2055,6 +2055,7 @@ describe('Computed fields for recipes (connected user)', () =>
 
         d.months = [1, 2, 3, 4, 5, 6]
         d.cost = 5.5
+        d.contains = ["meat"],
         d.environmentalImpact.co2eq.kgco2e_kg = 0.1
 
         return promiseForHttpSuccess('PUT', 'updateFood', 200, (resolve, reject, data) =>
@@ -2069,6 +2070,7 @@ describe('Computed fields for recipes (connected user)', () =>
 
         d.months = [2, 3, 4, 5, 6, 7, 8, 9]
         d.cost = 7.2
+        d.contains = ["oap"],
         d.environmentalImpact.co2eq.kgco2e_kg = 1.2
 
         return promiseForHttpSuccess('PUT', 'updateFood', 200, (resolve, reject, data) =>
@@ -2083,6 +2085,7 @@ describe('Computed fields for recipes (connected user)', () =>
 
         d.months = [7, 8, 9, 10, 11, 12]
         d.cost = 10.1
+        d.contains = ["meat"],
         d.environmentalImpact.co2eq.kgco2e_kg = 18.5
 
         return promiseForHttpSuccess('PUT', 'updateFood', 200, (resolve, reject, data) =>
@@ -2282,6 +2285,15 @@ describe('Computed fields for recipes (connected user)', () =>
             if (!data.months.includes(6))
                 reject()
 
+            if (data.contains.length != 2)
+                reject()
+
+            if (!data.contains.includes("meat"))
+                reject()
+
+            if (!data.contains.includes("oap"))
+                reject()
+
             if (Math.abs(data.ingredientsCost - 17.15) > 0.001)
                 reject()
 
@@ -2320,6 +2332,15 @@ describe('Computed fields for recipes (connected user)', () =>
             if (Math.abs(data.environmentalImpact.ingredientsCo2eq - 3.17) > 0.001)
                 reject()
 
+            if (data.contains.length != 2)
+                reject()
+
+            if (!data.contains.includes("meat"))
+                reject()
+
+            if (!data.contains.includes("oap"))
+                reject()
+
             resolve()
         })
     })
@@ -2335,6 +2356,15 @@ describe('Computed fields for recipes (connected user)', () =>
                 reject()
 
             if (Math.abs(data.environmentalImpact.ingredientsCo2eq - 17.582) > 0.001)
+                reject()
+
+            if (data.contains.length != 2)
+                reject()
+
+            if (!data.contains.includes("meat"))
+                reject()
+
+            if (!data.contains.includes("oap"))
                 reject()
 
             resolve()
