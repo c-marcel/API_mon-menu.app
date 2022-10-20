@@ -501,7 +501,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
             const queries = [];
 
             // Create table 'foods'.
-            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, picture text, months integer[], \"supplyArea\" integer, cost double precision, contains text[] \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
+            queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_foods + " (id text NOT NULL, title text, details text, picture text, months integer[], \"supplyArea\" integer, cost double precision, contains text[], \"environmentalImpact\" json, nutrition json, units json, PRIMARY KEY(id));" })
 
             // Create table 'recipegroups'.
             queries.push({ query: "CREATE TABLE IF NOT EXISTS " + this.tableName_recipegroups + " (id text NOT NULL, title text, PRIMARY KEY(id));" })
