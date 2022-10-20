@@ -1541,7 +1541,6 @@ describe('Create, delete, update recipes (connected user)', () =>
         d.details = "Vegan version"
         d.type = 2
         d.temperature = 1
-        d.contains = ["meat", "fish", "eggs"],
         d.months = [5, 6, 7, 8]
         d.nbOfParts = 7
         d.weight = 0.75
@@ -1613,18 +1612,6 @@ describe('Create, delete, update recipes (connected user)', () =>
                 reject()
 
             if (data.temperature != 1)
-                reject()
-
-            if (data.contains.length != 3)
-                reject()
-
-            if (!data.contains.includes("meat"))
-                reject()
-
-            if (!data.contains.includes("fish"))
-                reject()
-
-            if (!data.contains.includes("eggs"))
                 reject()
 
             if (data.months.length != 4)
