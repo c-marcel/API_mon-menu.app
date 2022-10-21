@@ -21,7 +21,7 @@ var Parent = require('./AbstractDataProvider')
 var config = require('../config')
 
 const g_environmentalImpactEmpty = "'{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }'"
-const g_nutritionEnpty           = ""
+var   g_nutritionEnpty           = ""
 
 class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 {
