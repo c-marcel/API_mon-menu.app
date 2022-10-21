@@ -907,9 +907,15 @@ describe('Create, delete, update foods (connected user)', () =>
             if (!data.hasOwnProperty('nutrition'))
                 reject()
 
-            let nutritionEntries = ['energy', 'proteins', 'carbohydrates', 'lipids', 'sugars', 'fibers', 'omega3_ala', 'omega3_epa',
-                                    'omega3_dha', 'omega6_la', 'omega6_ara', 'omega9', 'salt', 'calcium', 'copper', 'iron', 'iodine', 
-                                    'magnesium', 'sodium', 'zinc', 'vitamin_c', 'vitamin_d']
+            let nutritionEntries = ["energy_kj", "energy", "water", "salt", "sodium", "magnesium", "phosphorus", "potassium", 
+                                    "calcium", "manganese", "iron", "copper", "zinc", "selenium", "iodine", "proteins", 
+                                    "carbohydrates", "sugars", "fructose", "galactose", "lactose", "glucose", "maltose", 
+                                    "sucrose", "starch", "polyols", "fibers", "lipids", "satured_fa", "monounsaturated_fa", 
+                                    "polyunsaturated_fa", "butyric_fa", "caproic_fa", "caprylic_fa", "whimsical_fa", "lauric_fa", 
+                                    "myristic_fa", "palmitic_fa", "stearic_fa", "omega9", "omega6_la", "omega3_ala", "omega6_ara", 
+                                    "omega3_epa", "omega3_dha", "retinol", "betacarotene", "vitamin_d", "vitamin_e", "vitamin_k1", 
+                                    "vitamin_k2", "vitamin_c", "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5", "vitamin_b6", 
+                                    "vitamin_b12", "vitamin_b9", "alcohol", "organic_acids", "cholesterol"]
 
             for (let i in nutritionEntries)
             {
@@ -951,9 +957,15 @@ describe('Create, delete, update foods (connected user)', () =>
         d.environmentalImpact.co2eq.kgco2e_kg = 0.789
         d.environmentalImpact.co2eq.source    = "ADEME"
 
-        let nutritionEntries = ['energy', 'proteins', 'carbohydrates', 'lipids', 'sugars', 'fibers', 'omega3_ala', 'omega3_epa',
-                                'omega3_dha', 'omega6_la', 'omega6_ara', 'omega9', 'salt', 'calcium', 'copper', 'iron', 'iodine', 
-                                'magnesium', 'sodium', 'zinc', 'vitamin_c', 'vitamin_d']
+        let nutritionEntries = ["energy_kj", "energy", "water", "salt", "sodium", "magnesium", "phosphorus", "potassium", 
+                                "calcium", "manganese", "iron", "copper", "zinc", "selenium", "iodine", "proteins", 
+                                "carbohydrates", "sugars", "fructose", "galactose", "lactose", "glucose", "maltose", 
+                                "sucrose", "starch", "polyols", "fibers", "lipids", "satured_fa", "monounsaturated_fa", 
+                                "polyunsaturated_fa", "butyric_fa", "caproic_fa", "caprylic_fa", "whimsical_fa", "lauric_fa", 
+                                "myristic_fa", "palmitic_fa", "stearic_fa", "omega9", "omega6_la", "omega3_ala", "omega6_ara", 
+                                "omega3_epa", "omega3_dha", "retinol", "betacarotene", "vitamin_d", "vitamin_e", "vitamin_k1", 
+                                "vitamin_k2", "vitamin_c", "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5", "vitamin_b6", 
+                                "vitamin_b12", "vitamin_b9", "alcohol", "organic_acids", "cholesterol"]
 
         let value = 1.0
 
@@ -1020,9 +1032,15 @@ describe('Create, delete, update foods (connected user)', () =>
             if (data.units.label != "liter")
                 reject()
 
-            let nutritionEntries = ['energy', 'proteins', 'carbohydrates', 'lipids', 'sugars', 'fibers', 'omega3_ala', 'omega3_epa',
-                                'omega3_dha', 'omega6_la', 'omega6_ara', 'omega9', 'salt', 'calcium', 'copper', 'iron', 'iodine', 
-                                'magnesium', 'sodium', 'zinc', 'vitamin_c', 'vitamin_d']
+            let nutritionEntries = ["energy_kj", "energy", "water", "salt", "sodium", "magnesium", "phosphorus", "potassium", 
+                                    "calcium", "manganese", "iron", "copper", "zinc", "selenium", "iodine", "proteins", 
+                                    "carbohydrates", "sugars", "fructose", "galactose", "lactose", "glucose", "maltose", 
+                                    "sucrose", "starch", "polyols", "fibers", "lipids", "satured_fa", "monounsaturated_fa", 
+                                    "polyunsaturated_fa", "butyric_fa", "caproic_fa", "caprylic_fa", "whimsical_fa", "lauric_fa", 
+                                    "myristic_fa", "palmitic_fa", "stearic_fa", "omega9", "omega6_la", "omega3_ala", "omega6_ara", 
+                                    "omega3_epa", "omega3_dha", "retinol", "betacarotene", "vitamin_d", "vitamin_e", "vitamin_k1", 
+                                    "vitamin_k2", "vitamin_c", "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5", "vitamin_b6", 
+                                    "vitamin_b12", "vitamin_b9", "alcohol", "organic_acids", "cholesterol"]
 
             let value = 1.0
 

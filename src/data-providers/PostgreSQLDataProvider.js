@@ -20,6 +20,9 @@ const { Pool } = require("pg");
 var Parent = require('./AbstractDataProvider')
 var config = require('../config')
 
+const g_environmentalImpactEmpty = "'{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }'"
+const g_nutritionEnpty           = ""
+
 class PostgreSQLDataProvider extends Parent.AbstractDataProvider
 {
     constructor()
@@ -40,6 +43,24 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
         // Physical data.
         this.co2_electricity    = 0.074
         this.co2_gas            = 0.443
+
+        // Create empty nutrition field.
+        let keys = ["energy_kj", "energy", "water", "salt", "sodium", "magnesium", "phosphorus", "potassium", "calcium", "manganese", "iron", "copper", "zinc", "selenium", "iodine", "proteins", "carbohydrates", "sugars", "fructose", "galactose", "lactose", "glucose", "maltose", "sucrose", "starch", "polyols", "fibers", "lipids", "satured_fa", "monounsaturated_fa", "polyunsaturated_fa", "butyric_fa", "caproic_fa", "caprylic_fa", "whimsical_fa", "lauric_fa", "myristic_fa", "palmitic_fa", "stearic_fa", "omega9", "omega6_la", "omega3_ala", "omega6_ara", "omega3_epa", "omega3_dha", "retinol", "betacarotene", "vitamin_d", "vitamin_e", "vitamin_k1", "vitamin_k2", "vitamin_c", "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5", "vitamin_b6", "vitamin_b12", "vitamin_b9", "alcohol", "organic_acids", "cholesterol"]
+
+        if (g_nutritionEnpty == "")
+        {
+            g_nutritionEnpty = "'{ "
+
+            for (let i = 0 ; i < keys.length ; i++)
+            {
+                if (i != 0)
+                    g_nutritionEnpty += ", "
+
+                g_nutritionEnpty += "\"" + keys[i] + "\": { \"value\": 0.0, \"source\": \"\" }"
+            }
+
+            g_nutritionEnpty += " }'"
+        }
     }
 
     connect(options)
@@ -163,7 +184,7 @@ class PostgreSQLDataProvider extends Parent.AbstractDataProvider
     {
         var promise = new Promise((resolve, reject) =>
         {
-            this.pool.query("INSERT INTO " + this.tableName_foods + " (id, title, details, picture, months, \"supplyArea\", cost, contains, \"environmentalImpact\", nutrition) VALUES ('" + uuidv4() + "', '', '', '', ARRAY[]::integer[], 0, 0.0, ARRAY[]::text[], '{ \"co2eq\": { \"kgco2e_kg\": 0.0, \"source\": \"\" } }', '{ \"energy\": { \"value\": 0.0, \"source\": \"\" }, \"proteins\": { \"value\": 0.0, \"source\": \"\" }, \"carbohydrates\": { \"value\": 0.0, \"source\": \"\" }, \"lipids\": { \"value\": 0.0, \"source\": \"\" }, \"sugars\": { \"value\": 0.0, \"source\": \"\" }, \"fibers\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_ala\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_epa\": { \"value\": 0.0, \"source\": \"\" }, \"omega3_dha\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_la\": { \"value\": 0.0, \"source\": \"\" }, \"omega6_ara\": { \"value\": 0.0, \"source\": \"\" }, \"omega9\": { \"value\": 0.0, \"source\": \"\" }, \"salt\": { \"value\": 0.0, \"source\": \"\" }, \"calcium\": { \"value\": 0.0, \"source\": \"\" }, \"copper\": { \"value\": 0.0, \"source\": \"\" }, \"iron\": { \"value\": 0.0, \"source\": \"\" }, \"iodine\": { \"value\": 0.0, \"source\": \"\" }, \"magnesium\": { \"value\": 0.0, \"source\": \"\" }, \"sodium\": { \"value\": 0.0, \"source\": \"\" }, \"zinc\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_c\": { \"value\": 0.0, \"source\": \"\" }, \"vitamin_d\": { \"value\": 0.0, \"source\": \"\" } }') RETURNING id").then(function(res)
+            this.pool.query("INSERT INTO " + this.tableName_foods + " (id, title, details, picture, months, \"supplyArea\", cost, contains, \"environmentalImpact\", nutrition) VALUES ('" + uuidv4() + "', '', '', '', ARRAY[]::integer[], 0, 0.0, ARRAY[]::text[], " + g_environmentalImpactEmpty + ", " + g_nutritionEnpty + ") RETURNING id").then(function(res)
             {
                 if (res.rowCount == 1)
                 {
