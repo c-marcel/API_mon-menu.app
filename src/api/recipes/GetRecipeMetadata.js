@@ -57,7 +57,8 @@ var Parent = require('../AbstractEntryPoint')
   *               {
   *                   "preparation": 25,
   *                   "cooking": 45,
-  *                   "rest": 0
+  *                   "rest": 0,
+  *                   "total": 60
   *               },
   *               "resources":
   *               {
